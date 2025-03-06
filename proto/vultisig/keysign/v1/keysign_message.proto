@@ -39,6 +39,7 @@ message KeysignPayload {
     TonSpecific ton_specific = 12;
     RippleSpecific ripple_specific = 13;
     TronSpecific tron_specific = 14;
+    StellarSpecific stellar_specific = 15;
   }
   repeated UtxoInfo utxo_info = 20;
   optional string memo = 21;

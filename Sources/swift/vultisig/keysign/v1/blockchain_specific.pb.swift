@@ -64,6 +64,240 @@ extension VSTransactionType: CaseIterable {
 
 #endif  // swift(>=4.2)
 
+public enum VSSigningError: SwiftProtobuf.Enum {
+  public typealias RawValue = Int
+
+  /// This is the OK case, with value=0
+  case ok // = 0
+
+  /// Chain-generic codes:
+  /// Generic error (used if there is no suitable specific error is adequate)
+  case errorGeneral // = 1
+
+  /// Internal error, indicates some very unusual, unexpected case
+  case errorInternal // = 2
+
+  /// Chain-generic codes, input related:
+  /// Low balance: the sender balance is not enough to cover the send and other auxiliary amount such as fee, deposit, or minimal balance.
+  case errorLowBalance // = 3
+
+  /// Requested amount is zero, send of 0 makes no sense
+  case errorZeroAmountRequested // = 4
+
+  /// One required key is missing (too few or wrong keys are provided)
+  case errorMissingPrivateKey // = 5
+
+  /// A private key provided is invalid (e.g. wrong size, usually should be 32 bytes)
+  case errorInvalidPrivateKey // = 15
+
+  /// A provided address (e.g. destination address) is invalid
+  case errorInvalidAddress // = 16
+
+  /// A provided input UTXO is invalid
+  case errorInvalidUtxo // = 17
+
+  /// The amount of an input UTXO is invalid
+  case errorInvalidUtxoAmount // = 18
+
+  /// Chain-generic, fee related:
+  /// Wrong fee is given, probably it is too low to cover minimal fee for the transaction
+  case errorWrongFee // = 6
+
+  /// Chain-generic, signing related:
+  /// General signing error
+  case errorSigning // = 7
+
+  /// Resulting transaction is too large
+  /// [NEO] Transaction too big, fee in GAS needed or try send by parts
+  case errorTxTooBig // = 8
+
+  /// UTXO-chain specific, input related:
+  /// No input UTXOs provided [BTC]
+  case errorMissingInputUtxos // = 9
+
+  /// Not enough non-dust input UTXOs to cover requested amount (dust UTXOs are filtered out) [BTC]
+  case errorNotEnoughUtxos // = 10
+
+  /// UTXO-chain specific, script related:
+  /// [BTC] Missing required redeem script
+  case errorScriptRedeem // = 11
+
+  /// [BTC] Invalid required output script
+  case errorScriptOutput // = 12
+
+  /// [BTC] Unrecognized witness program
+  case errorScriptWitnessProgram // = 13
+
+  /// Invalid memo, e.g. [XRP] Invalid tag
+  case errorInvalidMemo // = 14
+
+  /// Some input field cannot be parsed
+  case errorInputParse // = 19
+
+  /// Multi-input and multi-output transaction not supported
+  case errorNoSupportN2N // = 20
+
+  /// Incorrect count of signatures passed to compile
+  case errorSignaturesCount // = 21
+
+  /// Incorrect input parameter
+  case errorInvalidParams // = 22
+
+  /// Invalid input token amount
+  case errorInvalidRequestedTokenAmount // = 23
+
+  /// Operation not supported for the chain.
+  case errorNotSupported // = 24
+
+  /// Requested amount is too low (less dust).
+  case errorDustAmountRequested // = 25
+  case UNRECOGNIZED(Int)
+
+  public init() {
+    self = .ok
+  }
+
+  public init?(rawValue: Int) {
+    switch rawValue {
+    case 0: self = .ok
+    case 1: self = .errorGeneral
+    case 2: self = .errorInternal
+    case 3: self = .errorLowBalance
+    case 4: self = .errorZeroAmountRequested
+    case 5: self = .errorMissingPrivateKey
+    case 6: self = .errorWrongFee
+    case 7: self = .errorSigning
+    case 8: self = .errorTxTooBig
+    case 9: self = .errorMissingInputUtxos
+    case 10: self = .errorNotEnoughUtxos
+    case 11: self = .errorScriptRedeem
+    case 12: self = .errorScriptOutput
+    case 13: self = .errorScriptWitnessProgram
+    case 14: self = .errorInvalidMemo
+    case 15: self = .errorInvalidPrivateKey
+    case 16: self = .errorInvalidAddress
+    case 17: self = .errorInvalidUtxo
+    case 18: self = .errorInvalidUtxoAmount
+    case 19: self = .errorInputParse
+    case 20: self = .errorNoSupportN2N
+    case 21: self = .errorSignaturesCount
+    case 22: self = .errorInvalidParams
+    case 23: self = .errorInvalidRequestedTokenAmount
+    case 24: self = .errorNotSupported
+    case 25: self = .errorDustAmountRequested
+    default: self = .UNRECOGNIZED(rawValue)
+    }
+  }
+
+  public var rawValue: Int {
+    switch self {
+    case .ok: return 0
+    case .errorGeneral: return 1
+    case .errorInternal: return 2
+    case .errorLowBalance: return 3
+    case .errorZeroAmountRequested: return 4
+    case .errorMissingPrivateKey: return 5
+    case .errorWrongFee: return 6
+    case .errorSigning: return 7
+    case .errorTxTooBig: return 8
+    case .errorMissingInputUtxos: return 9
+    case .errorNotEnoughUtxos: return 10
+    case .errorScriptRedeem: return 11
+    case .errorScriptOutput: return 12
+    case .errorScriptWitnessProgram: return 13
+    case .errorInvalidMemo: return 14
+    case .errorInvalidPrivateKey: return 15
+    case .errorInvalidAddress: return 16
+    case .errorInvalidUtxo: return 17
+    case .errorInvalidUtxoAmount: return 18
+    case .errorInputParse: return 19
+    case .errorNoSupportN2N: return 20
+    case .errorSignaturesCount: return 21
+    case .errorInvalidParams: return 22
+    case .errorInvalidRequestedTokenAmount: return 23
+    case .errorNotSupported: return 24
+    case .errorDustAmountRequested: return 25
+    case .UNRECOGNIZED(let i): return i
+    }
+  }
+
+}
+
+#if swift(>=4.2)
+
+extension VSSigningError: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  public static let allCases: [VSSigningError] = [
+    .ok,
+    .errorGeneral,
+    .errorInternal,
+    .errorLowBalance,
+    .errorZeroAmountRequested,
+    .errorMissingPrivateKey,
+    .errorInvalidPrivateKey,
+    .errorInvalidAddress,
+    .errorInvalidUtxo,
+    .errorInvalidUtxoAmount,
+    .errorWrongFee,
+    .errorSigning,
+    .errorTxTooBig,
+    .errorMissingInputUtxos,
+    .errorNotEnoughUtxos,
+    .errorScriptRedeem,
+    .errorScriptOutput,
+    .errorScriptWitnessProgram,
+    .errorInvalidMemo,
+    .errorInputParse,
+    .errorNoSupportN2N,
+    .errorSignaturesCount,
+    .errorInvalidParams,
+    .errorInvalidRequestedTokenAmount,
+    .errorNotSupported,
+    .errorDustAmountRequested,
+  ]
+}
+
+#endif  // swift(>=4.2)
+
+/// A predicate (used in claim)
+/// Rest of predicates not currently supported
+/// See https://github.com/stellar/stellar-protocol/blob/master/core/cap-0023.md
+public enum VSClaimPredicate: SwiftProtobuf.Enum {
+  public typealias RawValue = Int
+  case predicateUnconditional // = 0
+  case UNRECOGNIZED(Int)
+
+  public init() {
+    self = .predicateUnconditional
+  }
+
+  public init?(rawValue: Int) {
+    switch rawValue {
+    case 0: self = .predicateUnconditional
+    default: self = .UNRECOGNIZED(rawValue)
+    }
+  }
+
+  public var rawValue: Int {
+    switch self {
+    case .predicateUnconditional: return 0
+    case .UNRECOGNIZED(let i): return i
+    }
+  }
+
+}
+
+#if swift(>=4.2)
+
+extension VSClaimPredicate: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  public static let allCases: [VSClaimPredicate] = [
+    .predicateUnconditional,
+  ]
+}
+
+#endif  // swift(>=4.2)
+
 public struct VSUTXOSpecific {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -336,8 +570,617 @@ public struct VSTronSpecific {
   public init() {}
 }
 
+public struct VSStellarSpecific {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Transaction fee
+  public var fee: Int32 = 0
+
+  /// Account sequence
+  public var sequence: Int64 = 0
+
+  /// Source account
+  public var account: String = String()
+
+  /// The secret private key used for signing (32 bytes).
+  public var privateKey: Data = Data()
+
+  /// Wellknown passphrase, specific to the chain
+  public var passphrase: String = String()
+
+  /// Payload message
+  public var operationOneof: VSStellarSpecific.OneOf_OperationOneof? = nil
+
+  public var opCreateAccount: VSOperationCreateAccount {
+    get {
+      if case .opCreateAccount(let v)? = operationOneof {return v}
+      return VSOperationCreateAccount()
+    }
+    set {operationOneof = .opCreateAccount(newValue)}
+  }
+
+  public var opPayment: VSOperationPayment {
+    get {
+      if case .opPayment(let v)? = operationOneof {return v}
+      return VSOperationPayment()
+    }
+    set {operationOneof = .opPayment(newValue)}
+  }
+
+  public var opChangeTrust: VSOperationChangeTrust {
+    get {
+      if case .opChangeTrust(let v)? = operationOneof {return v}
+      return VSOperationChangeTrust()
+    }
+    set {operationOneof = .opChangeTrust(newValue)}
+  }
+
+  public var opCreateClaimableBalance: VSOperationCreateClaimableBalance {
+    get {
+      if case .opCreateClaimableBalance(let v)? = operationOneof {return v}
+      return VSOperationCreateClaimableBalance()
+    }
+    set {operationOneof = .opCreateClaimableBalance(newValue)}
+  }
+
+  public var opClaimClaimableBalance: VSOperationClaimClaimableBalance {
+    get {
+      if case .opClaimClaimableBalance(let v)? = operationOneof {return v}
+      return VSOperationClaimClaimableBalance()
+    }
+    set {operationOneof = .opClaimClaimableBalance(newValue)}
+  }
+
+  /// Memo
+  public var memoTypeOneof: VSStellarSpecific.OneOf_MemoTypeOneof? = nil
+
+  public var memoVoid: VSMemoVoid {
+    get {
+      if case .memoVoid(let v)? = memoTypeOneof {return v}
+      return VSMemoVoid()
+    }
+    set {memoTypeOneof = .memoVoid(newValue)}
+  }
+
+  public var memoText: VSMemoText {
+    get {
+      if case .memoText(let v)? = memoTypeOneof {return v}
+      return VSMemoText()
+    }
+    set {memoTypeOneof = .memoText(newValue)}
+  }
+
+  public var memoID: VSMemoId {
+    get {
+      if case .memoID(let v)? = memoTypeOneof {return v}
+      return VSMemoId()
+    }
+    set {memoTypeOneof = .memoID(newValue)}
+  }
+
+  public var memoHash: VSMemoHash {
+    get {
+      if case .memoHash(let v)? = memoTypeOneof {return v}
+      return VSMemoHash()
+    }
+    set {memoTypeOneof = .memoHash(newValue)}
+  }
+
+  public var memoReturnHash: VSMemoHash {
+    get {
+      if case .memoReturnHash(let v)? = memoTypeOneof {return v}
+      return VSMemoHash()
+    }
+    set {memoTypeOneof = .memoReturnHash(newValue)}
+  }
+
+  public var timeBounds: Int64 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  /// Payload message
+  public enum OneOf_OperationOneof: Equatable {
+    case opCreateAccount(VSOperationCreateAccount)
+    case opPayment(VSOperationPayment)
+    case opChangeTrust(VSOperationChangeTrust)
+    case opCreateClaimableBalance(VSOperationCreateClaimableBalance)
+    case opClaimClaimableBalance(VSOperationClaimClaimableBalance)
+
+  #if !swift(>=4.1)
+    public static func ==(lhs: VSStellarSpecific.OneOf_OperationOneof, rhs: VSStellarSpecific.OneOf_OperationOneof) -> Bool {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch (lhs, rhs) {
+      case (.opCreateAccount, .opCreateAccount): return {
+        guard case .opCreateAccount(let l) = lhs, case .opCreateAccount(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.opPayment, .opPayment): return {
+        guard case .opPayment(let l) = lhs, case .opPayment(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.opChangeTrust, .opChangeTrust): return {
+        guard case .opChangeTrust(let l) = lhs, case .opChangeTrust(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.opCreateClaimableBalance, .opCreateClaimableBalance): return {
+        guard case .opCreateClaimableBalance(let l) = lhs, case .opCreateClaimableBalance(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.opClaimClaimableBalance, .opClaimClaimableBalance): return {
+        guard case .opClaimClaimableBalance(let l) = lhs, case .opClaimClaimableBalance(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      default: return false
+      }
+    }
+  #endif
+  }
+
+  /// Memo
+  public enum OneOf_MemoTypeOneof: Equatable {
+    case memoVoid(VSMemoVoid)
+    case memoText(VSMemoText)
+    case memoID(VSMemoId)
+    case memoHash(VSMemoHash)
+    case memoReturnHash(VSMemoHash)
+
+  #if !swift(>=4.1)
+    public static func ==(lhs: VSStellarSpecific.OneOf_MemoTypeOneof, rhs: VSStellarSpecific.OneOf_MemoTypeOneof) -> Bool {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch (lhs, rhs) {
+      case (.memoVoid, .memoVoid): return {
+        guard case .memoVoid(let l) = lhs, case .memoVoid(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.memoText, .memoText): return {
+        guard case .memoText(let l) = lhs, case .memoText(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.memoID, .memoID): return {
+        guard case .memoID(let l) = lhs, case .memoID(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.memoHash, .memoHash): return {
+        guard case .memoHash(let l) = lhs, case .memoHash(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.memoReturnHash, .memoReturnHash): return {
+        guard case .memoReturnHash(let l) = lhs, case .memoReturnHash(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      default: return false
+      }
+    }
+  #endif
+  }
+
+  public init() {}
+}
+
+/// Represents an asset
+/// Note: alphanum12 currently not supported
+public struct VSAsset {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Optional in case of non-native asset; the asset issuer address
+  public var issuer: String = String()
+
+  /// Optional in case of non-native asset; the asset alphanum4 code.
+  public var alphanum4: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+/// Create a new account
+public struct VSOperationCreateAccount {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// address
+  public var destination: String = String()
+
+  /// Amount (*10^7)
+  public var amount: Int64 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+/// Perform payment
+public struct VSOperationPayment {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Destination address
+  public var destination: String = String()
+
+  /// Optional, can be left empty for native asset
+  public var asset: VSAsset {
+    get {return _asset ?? VSAsset()}
+    set {_asset = newValue}
+  }
+  /// Returns true if `asset` has been explicitly set.
+  public var hasAsset: Bool {return self._asset != nil}
+  /// Clears the value of `asset`. Subsequent reads from it will return its default value.
+  public mutating func clearAsset() {self._asset = nil}
+
+  /// Amount (*10^7)
+  public var amount: Int64 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _asset: VSAsset? = nil
+}
+
+/// Change trust
+public struct VSOperationChangeTrust {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// The asset
+  public var asset: VSAsset {
+    get {return _asset ?? VSAsset()}
+    set {_asset = newValue}
+  }
+  /// Returns true if `asset` has been explicitly set.
+  public var hasAsset: Bool {return self._asset != nil}
+  /// Clears the value of `asset`. Subsequent reads from it will return its default value.
+  public mutating func clearAsset() {self._asset = nil}
+
+  /// Validity (time bound to), unix time.  Set to (now() + 2 * 365 * 86400) for 2 years; set to 0 for missing.
+  public var validBefore: Int64 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _asset: VSAsset? = nil
+}
+
+/// Claimant: account & predicate
+public struct VSClaimant {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Claimant account
+  public var account: String = String()
+
+  /// predicate
+  public var predicate: VSClaimPredicate = .predicateUnconditional
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+/// Create a claimable balance (2-phase transfer)
+public struct VSOperationCreateClaimableBalance {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Optional, can be left empty for native asset
+  public var asset: VSAsset {
+    get {return _asset ?? VSAsset()}
+    set {_asset = newValue}
+  }
+  /// Returns true if `asset` has been explicitly set.
+  public var hasAsset: Bool {return self._asset != nil}
+  /// Clears the value of `asset`. Subsequent reads from it will return its default value.
+  public mutating func clearAsset() {self._asset = nil}
+
+  /// Amount (*10^7)
+  public var amount: Int64 = 0
+
+  /// One or more claimants
+  public var claimants: [VSClaimant] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _asset: VSAsset? = nil
+}
+
+/// Claim a claimable balance
+public struct VSOperationClaimClaimableBalance {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// 32-byte balance ID hash
+  public var balanceID: Data = Data()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+/// Empty memo (placeholder)
+public struct VSMemoVoid {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+/// Memo with text
+public struct VSMemoText {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var text: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+/// Memo with an ID
+public struct VSMemoId {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var id: Int64 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+/// Memo with a hash
+public struct VSMemoHash {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var hash: Data = Data()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+/// Input data necessary to create a signed transaction.
+public struct VSSigningInput {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Transaction fee
+  public var fee: Int32 = 0
+
+  /// Account sequence
+  public var sequence: Int64 = 0
+
+  /// Source account
+  public var account: String = String()
+
+  /// The secret private key used for signing (32 bytes).
+  public var privateKey: Data = Data()
+
+  /// Wellknown passphrase, specific to the chain
+  public var passphrase: String = String()
+
+  /// Payload message
+  public var operationOneof: VSSigningInput.OneOf_OperationOneof? = nil
+
+  public var opCreateAccount: VSOperationCreateAccount {
+    get {
+      if case .opCreateAccount(let v)? = operationOneof {return v}
+      return VSOperationCreateAccount()
+    }
+    set {operationOneof = .opCreateAccount(newValue)}
+  }
+
+  public var opPayment: VSOperationPayment {
+    get {
+      if case .opPayment(let v)? = operationOneof {return v}
+      return VSOperationPayment()
+    }
+    set {operationOneof = .opPayment(newValue)}
+  }
+
+  public var opChangeTrust: VSOperationChangeTrust {
+    get {
+      if case .opChangeTrust(let v)? = operationOneof {return v}
+      return VSOperationChangeTrust()
+    }
+    set {operationOneof = .opChangeTrust(newValue)}
+  }
+
+  public var opCreateClaimableBalance: VSOperationCreateClaimableBalance {
+    get {
+      if case .opCreateClaimableBalance(let v)? = operationOneof {return v}
+      return VSOperationCreateClaimableBalance()
+    }
+    set {operationOneof = .opCreateClaimableBalance(newValue)}
+  }
+
+  public var opClaimClaimableBalance: VSOperationClaimClaimableBalance {
+    get {
+      if case .opClaimClaimableBalance(let v)? = operationOneof {return v}
+      return VSOperationClaimClaimableBalance()
+    }
+    set {operationOneof = .opClaimClaimableBalance(newValue)}
+  }
+
+  /// Memo
+  public var memoTypeOneof: VSSigningInput.OneOf_MemoTypeOneof? = nil
+
+  public var memoVoid: VSMemoVoid {
+    get {
+      if case .memoVoid(let v)? = memoTypeOneof {return v}
+      return VSMemoVoid()
+    }
+    set {memoTypeOneof = .memoVoid(newValue)}
+  }
+
+  public var memoText: VSMemoText {
+    get {
+      if case .memoText(let v)? = memoTypeOneof {return v}
+      return VSMemoText()
+    }
+    set {memoTypeOneof = .memoText(newValue)}
+  }
+
+  public var memoID: VSMemoId {
+    get {
+      if case .memoID(let v)? = memoTypeOneof {return v}
+      return VSMemoId()
+    }
+    set {memoTypeOneof = .memoID(newValue)}
+  }
+
+  public var memoHash: VSMemoHash {
+    get {
+      if case .memoHash(let v)? = memoTypeOneof {return v}
+      return VSMemoHash()
+    }
+    set {memoTypeOneof = .memoHash(newValue)}
+  }
+
+  public var memoReturnHash: VSMemoHash {
+    get {
+      if case .memoReturnHash(let v)? = memoTypeOneof {return v}
+      return VSMemoHash()
+    }
+    set {memoTypeOneof = .memoReturnHash(newValue)}
+  }
+
+  public var timeBounds: Int64 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  /// Payload message
+  public enum OneOf_OperationOneof: Equatable {
+    case opCreateAccount(VSOperationCreateAccount)
+    case opPayment(VSOperationPayment)
+    case opChangeTrust(VSOperationChangeTrust)
+    case opCreateClaimableBalance(VSOperationCreateClaimableBalance)
+    case opClaimClaimableBalance(VSOperationClaimClaimableBalance)
+
+  #if !swift(>=4.1)
+    public static func ==(lhs: VSSigningInput.OneOf_OperationOneof, rhs: VSSigningInput.OneOf_OperationOneof) -> Bool {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch (lhs, rhs) {
+      case (.opCreateAccount, .opCreateAccount): return {
+        guard case .opCreateAccount(let l) = lhs, case .opCreateAccount(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.opPayment, .opPayment): return {
+        guard case .opPayment(let l) = lhs, case .opPayment(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.opChangeTrust, .opChangeTrust): return {
+        guard case .opChangeTrust(let l) = lhs, case .opChangeTrust(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.opCreateClaimableBalance, .opCreateClaimableBalance): return {
+        guard case .opCreateClaimableBalance(let l) = lhs, case .opCreateClaimableBalance(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.opClaimClaimableBalance, .opClaimClaimableBalance): return {
+        guard case .opClaimClaimableBalance(let l) = lhs, case .opClaimClaimableBalance(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      default: return false
+      }
+    }
+  #endif
+  }
+
+  /// Memo
+  public enum OneOf_MemoTypeOneof: Equatable {
+    case memoVoid(VSMemoVoid)
+    case memoText(VSMemoText)
+    case memoID(VSMemoId)
+    case memoHash(VSMemoHash)
+    case memoReturnHash(VSMemoHash)
+
+  #if !swift(>=4.1)
+    public static func ==(lhs: VSSigningInput.OneOf_MemoTypeOneof, rhs: VSSigningInput.OneOf_MemoTypeOneof) -> Bool {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch (lhs, rhs) {
+      case (.memoVoid, .memoVoid): return {
+        guard case .memoVoid(let l) = lhs, case .memoVoid(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.memoText, .memoText): return {
+        guard case .memoText(let l) = lhs, case .memoText(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.memoID, .memoID): return {
+        guard case .memoID(let l) = lhs, case .memoID(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.memoHash, .memoHash): return {
+        guard case .memoHash(let l) = lhs, case .memoHash(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.memoReturnHash, .memoReturnHash): return {
+        guard case .memoReturnHash(let l) = lhs, case .memoReturnHash(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      default: return false
+      }
+    }
+  #endif
+  }
+
+  public init() {}
+}
+
+/// Result containing the signed and encoded transaction.
+public struct VSSigningOutput {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Signature.
+  public var signature: String = String()
+
+  /// error code, 0 is ok, other codes will be treated as errors
+  public var error: VSSigningError = .ok
+
+  /// error code description
+  public var errorMessage: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 #if swift(>=5.5) && canImport(_Concurrency)
 extension VSTransactionType: @unchecked Sendable {}
+extension VSSigningError: @unchecked Sendable {}
+extension VSClaimPredicate: @unchecked Sendable {}
 extension VSUTXOSpecific: @unchecked Sendable {}
 extension VSEthereumSpecific: @unchecked Sendable {}
 extension VSTHORChainSpecific: @unchecked Sendable {}
@@ -351,6 +1194,24 @@ extension VSSuiSpecific: @unchecked Sendable {}
 extension VSTonSpecific: @unchecked Sendable {}
 extension VSRippleSpecific: @unchecked Sendable {}
 extension VSTronSpecific: @unchecked Sendable {}
+extension VSStellarSpecific: @unchecked Sendable {}
+extension VSStellarSpecific.OneOf_OperationOneof: @unchecked Sendable {}
+extension VSStellarSpecific.OneOf_MemoTypeOneof: @unchecked Sendable {}
+extension VSAsset: @unchecked Sendable {}
+extension VSOperationCreateAccount: @unchecked Sendable {}
+extension VSOperationPayment: @unchecked Sendable {}
+extension VSOperationChangeTrust: @unchecked Sendable {}
+extension VSClaimant: @unchecked Sendable {}
+extension VSOperationCreateClaimableBalance: @unchecked Sendable {}
+extension VSOperationClaimClaimableBalance: @unchecked Sendable {}
+extension VSMemoVoid: @unchecked Sendable {}
+extension VSMemoText: @unchecked Sendable {}
+extension VSMemoId: @unchecked Sendable {}
+extension VSMemoHash: @unchecked Sendable {}
+extension VSSigningInput: @unchecked Sendable {}
+extension VSSigningInput.OneOf_OperationOneof: @unchecked Sendable {}
+extension VSSigningInput.OneOf_MemoTypeOneof: @unchecked Sendable {}
+extension VSSigningOutput: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -362,6 +1223,43 @@ extension VSTransactionType: SwiftProtobuf._ProtoNameProviding {
     0: .same(proto: "TRANSACTION_TYPE_UNSPECIFIED"),
     1: .same(proto: "TRANSACTION_TYPE_VOTE"),
     2: .same(proto: "TRANSACTION_TYPE_PROPOSAL"),
+  ]
+}
+
+extension VSSigningError: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "OK"),
+    1: .same(proto: "Error_general"),
+    2: .same(proto: "Error_internal"),
+    3: .same(proto: "Error_low_balance"),
+    4: .same(proto: "Error_zero_amount_requested"),
+    5: .same(proto: "Error_missing_private_key"),
+    6: .same(proto: "Error_wrong_fee"),
+    7: .same(proto: "Error_signing"),
+    8: .same(proto: "Error_tx_too_big"),
+    9: .same(proto: "Error_missing_input_utxos"),
+    10: .same(proto: "Error_not_enough_utxos"),
+    11: .same(proto: "Error_script_redeem"),
+    12: .same(proto: "Error_script_output"),
+    13: .same(proto: "Error_script_witness_program"),
+    14: .same(proto: "Error_invalid_memo"),
+    15: .same(proto: "Error_invalid_private_key"),
+    16: .same(proto: "Error_invalid_address"),
+    17: .same(proto: "Error_invalid_utxo"),
+    18: .same(proto: "Error_invalid_utxo_amount"),
+    19: .same(proto: "Error_input_parse"),
+    20: .same(proto: "Error_no_support_n2n"),
+    21: .same(proto: "Error_signatures_count"),
+    22: .same(proto: "Error_invalid_params"),
+    23: .same(proto: "Error_invalid_requested_token_amount"),
+    24: .same(proto: "Error_not_supported"),
+    25: .same(proto: "Error_dust_amount_requested"),
+  ]
+}
+
+extension VSClaimPredicate: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "Predicate_unconditional"),
   ]
 }
 
@@ -1030,6 +1928,963 @@ extension VSTronSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
     if lhs.blockHeaderParentHash != rhs.blockHeaderParentHash {return false}
     if lhs.blockHeaderWitnessAddress != rhs.blockHeaderWitnessAddress {return false}
     if lhs.gasEstimation != rhs.gasEstimation {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSStellarSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".StellarSpecific"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "fee"),
+    2: .same(proto: "sequence"),
+    3: .same(proto: "account"),
+    4: .standard(proto: "private_key"),
+    5: .same(proto: "passphrase"),
+    6: .standard(proto: "op_create_account"),
+    7: .standard(proto: "op_payment"),
+    8: .standard(proto: "op_change_trust"),
+    14: .standard(proto: "op_create_claimable_balance"),
+    15: .standard(proto: "op_claim_claimable_balance"),
+    9: .standard(proto: "memo_void"),
+    10: .standard(proto: "memo_text"),
+    11: .standard(proto: "memo_id"),
+    12: .standard(proto: "memo_hash"),
+    13: .standard(proto: "memo_return_hash"),
+    16: .standard(proto: "time_bounds"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularInt32Field(value: &self.fee) }()
+      case 2: try { try decoder.decodeSingularInt64Field(value: &self.sequence) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.account) }()
+      case 4: try { try decoder.decodeSingularBytesField(value: &self.privateKey) }()
+      case 5: try { try decoder.decodeSingularStringField(value: &self.passphrase) }()
+      case 6: try {
+        var v: VSOperationCreateAccount?
+        var hadOneofValue = false
+        if let current = self.operationOneof {
+          hadOneofValue = true
+          if case .opCreateAccount(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.operationOneof = .opCreateAccount(v)
+        }
+      }()
+      case 7: try {
+        var v: VSOperationPayment?
+        var hadOneofValue = false
+        if let current = self.operationOneof {
+          hadOneofValue = true
+          if case .opPayment(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.operationOneof = .opPayment(v)
+        }
+      }()
+      case 8: try {
+        var v: VSOperationChangeTrust?
+        var hadOneofValue = false
+        if let current = self.operationOneof {
+          hadOneofValue = true
+          if case .opChangeTrust(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.operationOneof = .opChangeTrust(v)
+        }
+      }()
+      case 9: try {
+        var v: VSMemoVoid?
+        var hadOneofValue = false
+        if let current = self.memoTypeOneof {
+          hadOneofValue = true
+          if case .memoVoid(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.memoTypeOneof = .memoVoid(v)
+        }
+      }()
+      case 10: try {
+        var v: VSMemoText?
+        var hadOneofValue = false
+        if let current = self.memoTypeOneof {
+          hadOneofValue = true
+          if case .memoText(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.memoTypeOneof = .memoText(v)
+        }
+      }()
+      case 11: try {
+        var v: VSMemoId?
+        var hadOneofValue = false
+        if let current = self.memoTypeOneof {
+          hadOneofValue = true
+          if case .memoID(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.memoTypeOneof = .memoID(v)
+        }
+      }()
+      case 12: try {
+        var v: VSMemoHash?
+        var hadOneofValue = false
+        if let current = self.memoTypeOneof {
+          hadOneofValue = true
+          if case .memoHash(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.memoTypeOneof = .memoHash(v)
+        }
+      }()
+      case 13: try {
+        var v: VSMemoHash?
+        var hadOneofValue = false
+        if let current = self.memoTypeOneof {
+          hadOneofValue = true
+          if case .memoReturnHash(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.memoTypeOneof = .memoReturnHash(v)
+        }
+      }()
+      case 14: try {
+        var v: VSOperationCreateClaimableBalance?
+        var hadOneofValue = false
+        if let current = self.operationOneof {
+          hadOneofValue = true
+          if case .opCreateClaimableBalance(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.operationOneof = .opCreateClaimableBalance(v)
+        }
+      }()
+      case 15: try {
+        var v: VSOperationClaimClaimableBalance?
+        var hadOneofValue = false
+        if let current = self.operationOneof {
+          hadOneofValue = true
+          if case .opClaimClaimableBalance(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.operationOneof = .opClaimClaimableBalance(v)
+        }
+      }()
+      case 16: try { try decoder.decodeSingularInt64Field(value: &self.timeBounds) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if self.fee != 0 {
+      try visitor.visitSingularInt32Field(value: self.fee, fieldNumber: 1)
+    }
+    if self.sequence != 0 {
+      try visitor.visitSingularInt64Field(value: self.sequence, fieldNumber: 2)
+    }
+    if !self.account.isEmpty {
+      try visitor.visitSingularStringField(value: self.account, fieldNumber: 3)
+    }
+    if !self.privateKey.isEmpty {
+      try visitor.visitSingularBytesField(value: self.privateKey, fieldNumber: 4)
+    }
+    if !self.passphrase.isEmpty {
+      try visitor.visitSingularStringField(value: self.passphrase, fieldNumber: 5)
+    }
+    switch self.operationOneof {
+    case .opCreateAccount?: try {
+      guard case .opCreateAccount(let v)? = self.operationOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+    }()
+    case .opPayment?: try {
+      guard case .opPayment(let v)? = self.operationOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
+    }()
+    case .opChangeTrust?: try {
+      guard case .opChangeTrust(let v)? = self.operationOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+    }()
+    default: break
+    }
+    switch self.memoTypeOneof {
+    case .memoVoid?: try {
+      guard case .memoVoid(let v)? = self.memoTypeOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
+    }()
+    case .memoText?: try {
+      guard case .memoText(let v)? = self.memoTypeOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
+    }()
+    case .memoID?: try {
+      guard case .memoID(let v)? = self.memoTypeOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 11)
+    }()
+    case .memoHash?: try {
+      guard case .memoHash(let v)? = self.memoTypeOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 12)
+    }()
+    case .memoReturnHash?: try {
+      guard case .memoReturnHash(let v)? = self.memoTypeOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 13)
+    }()
+    case nil: break
+    }
+    switch self.operationOneof {
+    case .opCreateClaimableBalance?: try {
+      guard case .opCreateClaimableBalance(let v)? = self.operationOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 14)
+    }()
+    case .opClaimClaimableBalance?: try {
+      guard case .opClaimClaimableBalance(let v)? = self.operationOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 15)
+    }()
+    default: break
+    }
+    if self.timeBounds != 0 {
+      try visitor.visitSingularInt64Field(value: self.timeBounds, fieldNumber: 16)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSStellarSpecific, rhs: VSStellarSpecific) -> Bool {
+    if lhs.fee != rhs.fee {return false}
+    if lhs.sequence != rhs.sequence {return false}
+    if lhs.account != rhs.account {return false}
+    if lhs.privateKey != rhs.privateKey {return false}
+    if lhs.passphrase != rhs.passphrase {return false}
+    if lhs.operationOneof != rhs.operationOneof {return false}
+    if lhs.memoTypeOneof != rhs.memoTypeOneof {return false}
+    if lhs.timeBounds != rhs.timeBounds {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSAsset: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".Asset"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "issuer"),
+    2: .same(proto: "alphanum4"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.issuer) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.alphanum4) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.issuer.isEmpty {
+      try visitor.visitSingularStringField(value: self.issuer, fieldNumber: 1)
+    }
+    if !self.alphanum4.isEmpty {
+      try visitor.visitSingularStringField(value: self.alphanum4, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSAsset, rhs: VSAsset) -> Bool {
+    if lhs.issuer != rhs.issuer {return false}
+    if lhs.alphanum4 != rhs.alphanum4 {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSOperationCreateAccount: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".OperationCreateAccount"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "destination"),
+    2: .same(proto: "amount"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.destination) }()
+      case 2: try { try decoder.decodeSingularInt64Field(value: &self.amount) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.destination.isEmpty {
+      try visitor.visitSingularStringField(value: self.destination, fieldNumber: 1)
+    }
+    if self.amount != 0 {
+      try visitor.visitSingularInt64Field(value: self.amount, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSOperationCreateAccount, rhs: VSOperationCreateAccount) -> Bool {
+    if lhs.destination != rhs.destination {return false}
+    if lhs.amount != rhs.amount {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSOperationPayment: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".OperationPayment"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "destination"),
+    2: .same(proto: "asset"),
+    3: .same(proto: "amount"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.destination) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._asset) }()
+      case 3: try { try decoder.decodeSingularInt64Field(value: &self.amount) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if !self.destination.isEmpty {
+      try visitor.visitSingularStringField(value: self.destination, fieldNumber: 1)
+    }
+    try { if let v = self._asset {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    } }()
+    if self.amount != 0 {
+      try visitor.visitSingularInt64Field(value: self.amount, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSOperationPayment, rhs: VSOperationPayment) -> Bool {
+    if lhs.destination != rhs.destination {return false}
+    if lhs._asset != rhs._asset {return false}
+    if lhs.amount != rhs.amount {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSOperationChangeTrust: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".OperationChangeTrust"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "asset"),
+    2: .standard(proto: "valid_before"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._asset) }()
+      case 2: try { try decoder.decodeSingularInt64Field(value: &self.validBefore) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._asset {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if self.validBefore != 0 {
+      try visitor.visitSingularInt64Field(value: self.validBefore, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSOperationChangeTrust, rhs: VSOperationChangeTrust) -> Bool {
+    if lhs._asset != rhs._asset {return false}
+    if lhs.validBefore != rhs.validBefore {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSClaimant: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".Claimant"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "account"),
+    2: .same(proto: "predicate"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.account) }()
+      case 2: try { try decoder.decodeSingularEnumField(value: &self.predicate) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.account.isEmpty {
+      try visitor.visitSingularStringField(value: self.account, fieldNumber: 1)
+    }
+    if self.predicate != .predicateUnconditional {
+      try visitor.visitSingularEnumField(value: self.predicate, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSClaimant, rhs: VSClaimant) -> Bool {
+    if lhs.account != rhs.account {return false}
+    if lhs.predicate != rhs.predicate {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSOperationCreateClaimableBalance: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".OperationCreateClaimableBalance"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "asset"),
+    2: .same(proto: "amount"),
+    3: .same(proto: "claimants"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._asset) }()
+      case 2: try { try decoder.decodeSingularInt64Field(value: &self.amount) }()
+      case 3: try { try decoder.decodeRepeatedMessageField(value: &self.claimants) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._asset {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if self.amount != 0 {
+      try visitor.visitSingularInt64Field(value: self.amount, fieldNumber: 2)
+    }
+    if !self.claimants.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.claimants, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSOperationCreateClaimableBalance, rhs: VSOperationCreateClaimableBalance) -> Bool {
+    if lhs._asset != rhs._asset {return false}
+    if lhs.amount != rhs.amount {return false}
+    if lhs.claimants != rhs.claimants {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSOperationClaimClaimableBalance: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".OperationClaimClaimableBalance"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "balance_id"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularBytesField(value: &self.balanceID) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.balanceID.isEmpty {
+      try visitor.visitSingularBytesField(value: self.balanceID, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSOperationClaimClaimableBalance, rhs: VSOperationClaimClaimableBalance) -> Bool {
+    if lhs.balanceID != rhs.balanceID {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSMemoVoid: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MemoVoid"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let _ = try decoder.nextFieldNumber() {
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSMemoVoid, rhs: VSMemoVoid) -> Bool {
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSMemoText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MemoText"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "text"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.text) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.text.isEmpty {
+      try visitor.visitSingularStringField(value: self.text, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSMemoText, rhs: VSMemoText) -> Bool {
+    if lhs.text != rhs.text {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSMemoId: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MemoId"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "id"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularInt64Field(value: &self.id) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.id != 0 {
+      try visitor.visitSingularInt64Field(value: self.id, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSMemoId, rhs: VSMemoId) -> Bool {
+    if lhs.id != rhs.id {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSMemoHash: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MemoHash"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "hash"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularBytesField(value: &self.hash) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.hash.isEmpty {
+      try visitor.visitSingularBytesField(value: self.hash, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSMemoHash, rhs: VSMemoHash) -> Bool {
+    if lhs.hash != rhs.hash {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSSigningInput: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".SigningInput"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "fee"),
+    2: .same(proto: "sequence"),
+    3: .same(proto: "account"),
+    4: .standard(proto: "private_key"),
+    5: .same(proto: "passphrase"),
+    6: .standard(proto: "op_create_account"),
+    7: .standard(proto: "op_payment"),
+    8: .standard(proto: "op_change_trust"),
+    14: .standard(proto: "op_create_claimable_balance"),
+    15: .standard(proto: "op_claim_claimable_balance"),
+    9: .standard(proto: "memo_void"),
+    10: .standard(proto: "memo_text"),
+    11: .standard(proto: "memo_id"),
+    12: .standard(proto: "memo_hash"),
+    13: .standard(proto: "memo_return_hash"),
+    16: .standard(proto: "time_bounds"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularInt32Field(value: &self.fee) }()
+      case 2: try { try decoder.decodeSingularInt64Field(value: &self.sequence) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.account) }()
+      case 4: try { try decoder.decodeSingularBytesField(value: &self.privateKey) }()
+      case 5: try { try decoder.decodeSingularStringField(value: &self.passphrase) }()
+      case 6: try {
+        var v: VSOperationCreateAccount?
+        var hadOneofValue = false
+        if let current = self.operationOneof {
+          hadOneofValue = true
+          if case .opCreateAccount(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.operationOneof = .opCreateAccount(v)
+        }
+      }()
+      case 7: try {
+        var v: VSOperationPayment?
+        var hadOneofValue = false
+        if let current = self.operationOneof {
+          hadOneofValue = true
+          if case .opPayment(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.operationOneof = .opPayment(v)
+        }
+      }()
+      case 8: try {
+        var v: VSOperationChangeTrust?
+        var hadOneofValue = false
+        if let current = self.operationOneof {
+          hadOneofValue = true
+          if case .opChangeTrust(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.operationOneof = .opChangeTrust(v)
+        }
+      }()
+      case 9: try {
+        var v: VSMemoVoid?
+        var hadOneofValue = false
+        if let current = self.memoTypeOneof {
+          hadOneofValue = true
+          if case .memoVoid(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.memoTypeOneof = .memoVoid(v)
+        }
+      }()
+      case 10: try {
+        var v: VSMemoText?
+        var hadOneofValue = false
+        if let current = self.memoTypeOneof {
+          hadOneofValue = true
+          if case .memoText(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.memoTypeOneof = .memoText(v)
+        }
+      }()
+      case 11: try {
+        var v: VSMemoId?
+        var hadOneofValue = false
+        if let current = self.memoTypeOneof {
+          hadOneofValue = true
+          if case .memoID(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.memoTypeOneof = .memoID(v)
+        }
+      }()
+      case 12: try {
+        var v: VSMemoHash?
+        var hadOneofValue = false
+        if let current = self.memoTypeOneof {
+          hadOneofValue = true
+          if case .memoHash(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.memoTypeOneof = .memoHash(v)
+        }
+      }()
+      case 13: try {
+        var v: VSMemoHash?
+        var hadOneofValue = false
+        if let current = self.memoTypeOneof {
+          hadOneofValue = true
+          if case .memoReturnHash(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.memoTypeOneof = .memoReturnHash(v)
+        }
+      }()
+      case 14: try {
+        var v: VSOperationCreateClaimableBalance?
+        var hadOneofValue = false
+        if let current = self.operationOneof {
+          hadOneofValue = true
+          if case .opCreateClaimableBalance(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.operationOneof = .opCreateClaimableBalance(v)
+        }
+      }()
+      case 15: try {
+        var v: VSOperationClaimClaimableBalance?
+        var hadOneofValue = false
+        if let current = self.operationOneof {
+          hadOneofValue = true
+          if case .opClaimClaimableBalance(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.operationOneof = .opClaimClaimableBalance(v)
+        }
+      }()
+      case 16: try { try decoder.decodeSingularInt64Field(value: &self.timeBounds) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if self.fee != 0 {
+      try visitor.visitSingularInt32Field(value: self.fee, fieldNumber: 1)
+    }
+    if self.sequence != 0 {
+      try visitor.visitSingularInt64Field(value: self.sequence, fieldNumber: 2)
+    }
+    if !self.account.isEmpty {
+      try visitor.visitSingularStringField(value: self.account, fieldNumber: 3)
+    }
+    if !self.privateKey.isEmpty {
+      try visitor.visitSingularBytesField(value: self.privateKey, fieldNumber: 4)
+    }
+    if !self.passphrase.isEmpty {
+      try visitor.visitSingularStringField(value: self.passphrase, fieldNumber: 5)
+    }
+    switch self.operationOneof {
+    case .opCreateAccount?: try {
+      guard case .opCreateAccount(let v)? = self.operationOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+    }()
+    case .opPayment?: try {
+      guard case .opPayment(let v)? = self.operationOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
+    }()
+    case .opChangeTrust?: try {
+      guard case .opChangeTrust(let v)? = self.operationOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+    }()
+    default: break
+    }
+    switch self.memoTypeOneof {
+    case .memoVoid?: try {
+      guard case .memoVoid(let v)? = self.memoTypeOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
+    }()
+    case .memoText?: try {
+      guard case .memoText(let v)? = self.memoTypeOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
+    }()
+    case .memoID?: try {
+      guard case .memoID(let v)? = self.memoTypeOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 11)
+    }()
+    case .memoHash?: try {
+      guard case .memoHash(let v)? = self.memoTypeOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 12)
+    }()
+    case .memoReturnHash?: try {
+      guard case .memoReturnHash(let v)? = self.memoTypeOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 13)
+    }()
+    case nil: break
+    }
+    switch self.operationOneof {
+    case .opCreateClaimableBalance?: try {
+      guard case .opCreateClaimableBalance(let v)? = self.operationOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 14)
+    }()
+    case .opClaimClaimableBalance?: try {
+      guard case .opClaimClaimableBalance(let v)? = self.operationOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 15)
+    }()
+    default: break
+    }
+    if self.timeBounds != 0 {
+      try visitor.visitSingularInt64Field(value: self.timeBounds, fieldNumber: 16)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSSigningInput, rhs: VSSigningInput) -> Bool {
+    if lhs.fee != rhs.fee {return false}
+    if lhs.sequence != rhs.sequence {return false}
+    if lhs.account != rhs.account {return false}
+    if lhs.privateKey != rhs.privateKey {return false}
+    if lhs.passphrase != rhs.passphrase {return false}
+    if lhs.operationOneof != rhs.operationOneof {return false}
+    if lhs.memoTypeOneof != rhs.memoTypeOneof {return false}
+    if lhs.timeBounds != rhs.timeBounds {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VSSigningOutput: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".SigningOutput"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "signature"),
+    2: .same(proto: "error"),
+    3: .standard(proto: "error_message"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.signature) }()
+      case 2: try { try decoder.decodeSingularEnumField(value: &self.error) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.errorMessage) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.signature.isEmpty {
+      try visitor.visitSingularStringField(value: self.signature, fieldNumber: 1)
+    }
+    if self.error != .ok {
+      try visitor.visitSingularEnumField(value: self.error, fieldNumber: 2)
+    }
+    if !self.errorMessage.isEmpty {
+      try visitor.visitSingularStringField(value: self.errorMessage, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VSSigningOutput, rhs: VSSigningOutput) -> Bool {
+    if lhs.signature != rhs.signature {return false}
+    if lhs.error != rhs.error {return false}
+    if lhs.errorMessage != rhs.errorMessage {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

@@ -103,3 +103,251 @@ message TronSpecific {
   string block_header_witness_address = 8;
   uint64 gas_estimation = 9;
 }
+
+message StellarSpecific {
+  // Transaction fee
+  int32 fee = 1;
+
+  // Account sequence
+  int64 sequence = 2;
+
+  // Source account
+  string account = 3;
+
+  // The secret private key used for signing (32 bytes).
+  bytes private_key = 4;
+
+  // Wellknown passphrase, specific to the chain
+  string passphrase = 5;
+
+  // Payload message
+  oneof operation_oneof {
+    OperationCreateAccount op_create_account = 6;
+    OperationPayment op_payment = 7;
+    OperationChangeTrust op_change_trust = 8;
+    OperationCreateClaimableBalance op_create_claimable_balance = 14;
+    OperationClaimClaimableBalance op_claim_claimable_balance = 15;
+  }
+
+  // Memo
+  oneof memo_type_oneof {
+    MemoVoid memo_void = 9;
+    MemoText memo_text = 10;
+    MemoId memo_id = 11;
+    MemoHash memo_hash = 12;
+    MemoHash memo_return_hash = 13;
+  }
+
+  int64 time_bounds = 16;
+}
+
+enum SigningError {
+  // This is the OK case, with value=0
+  OK = 0;
+
+  // Chain-generic codes:
+  // Generic error (used if there is no suitable specific error is adequate)
+  Error_general = 1;
+  // Internal error, indicates some very unusual, unexpected case
+  Error_internal = 2;
+
+  // Chain-generic codes, input related:
+  // Low balance: the sender balance is not enough to cover the send and other auxiliary amount such as fee, deposit, or minimal balance.
+  Error_low_balance = 3;
+  // Requested amount is zero, send of 0 makes no sense
+  Error_zero_amount_requested = 4;
+  // One required key is missing (too few or wrong keys are provided)
+  Error_missing_private_key = 5;
+  // A private key provided is invalid (e.g. wrong size, usually should be 32 bytes)
+  Error_invalid_private_key = 15;
+  // A provided address (e.g. destination address) is invalid
+  Error_invalid_address = 16;
+  // A provided input UTXO is invalid
+  Error_invalid_utxo = 17;
+  // The amount of an input UTXO is invalid
+  Error_invalid_utxo_amount = 18;
+
+  // Chain-generic, fee related:
+  // Wrong fee is given, probably it is too low to cover minimal fee for the transaction
+  Error_wrong_fee = 6;
+
+  // Chain-generic, signing related:
+  // General signing error
+  Error_signing = 7;
+  // Resulting transaction is too large
+  // [NEO] Transaction too big, fee in GAS needed or try send by parts
+  Error_tx_too_big = 8;
+
+  // UTXO-chain specific, input related:
+  // No input UTXOs provided [BTC]
+  Error_missing_input_utxos = 9;
+  // Not enough non-dust input UTXOs to cover requested amount (dust UTXOs are filtered out) [BTC]
+  Error_not_enough_utxos = 10;
+
+  // UTXO-chain specific, script related:
+  // [BTC] Missing required redeem script
+  Error_script_redeem = 11;
+  // [BTC] Invalid required output script
+  Error_script_output = 12;
+  // [BTC] Unrecognized witness program
+  Error_script_witness_program = 13;
+
+  // Invalid memo, e.g. [XRP] Invalid tag
+  Error_invalid_memo = 14;
+  // Some input field cannot be parsed
+  Error_input_parse = 19;
+  // Multi-input and multi-output transaction not supported
+  Error_no_support_n2n = 20;
+  // Incorrect count of signatures passed to compile
+  Error_signatures_count = 21;
+  // Incorrect input parameter
+  Error_invalid_params = 22;
+  // Invalid input token amount
+  Error_invalid_requested_token_amount = 23;
+  // Operation not supported for the chain.
+  Error_not_supported = 24;
+  // Requested amount is too low (less dust).
+  Error_dust_amount_requested = 25;
+}
+
+// Represents an asset
+// Note: alphanum12 currently not supported
+message Asset {
+  // Optional in case of non-native asset; the asset issuer address
+  string issuer = 1;
+
+  // Optional in case of non-native asset; the asset alphanum4 code.
+  string alphanum4 = 2;
+}
+
+// Create a new account
+message OperationCreateAccount {
+  // address
+  string destination = 1;
+
+  // Amount (*10^7)
+  int64 amount = 2;
+}
+
+// Perform payment
+message OperationPayment {
+  // Destination address
+  string destination = 1;
+
+  // Optional, can be left empty for native asset
+  Asset asset = 2;
+
+  // Amount (*10^7)
+  int64 amount = 3;
+}
+
+// Change trust
+message OperationChangeTrust {
+  // The asset
+  Asset asset = 1;
+
+  // Validity (time bound to), unix time.  Set to (now() + 2 * 365 * 86400) for 2 years; set to 0 for missing.
+  int64 valid_before = 2;
+}
+
+// A predicate (used in claim)
+// Rest of predicates not currently supported
+// See https://github.com/stellar/stellar-protocol/blob/master/core/cap-0023.md
+enum ClaimPredicate {
+  Predicate_unconditional = 0;
+}
+
+// Claimant: account & predicate
+message Claimant {
+  // Claimant account
+  string account = 1;
+
+  // predicate
+  ClaimPredicate predicate = 2;
+}
+
+// Create a claimable balance (2-phase transfer)
+message OperationCreateClaimableBalance {
+  // Optional, can be left empty for native asset
+  Asset asset = 1;
+
+  // Amount (*10^7)
+  int64 amount = 2;
+
+  // One or more claimants
+  repeated Claimant claimants = 3;
+}
+
+// Claim a claimable balance
+message OperationClaimClaimableBalance {
+  // 32-byte balance ID hash
+  bytes balance_id = 1;
+}
+
+// Empty memo (placeholder)
+message MemoVoid {}
+
+// Memo with text
+message MemoText {
+  string text = 1;
+}
+
+// Memo with an ID
+message MemoId {
+  int64 id = 1;
+}
+
+// Memo with a hash
+message MemoHash {
+  bytes hash = 1;
+}
+
+// Input data necessary to create a signed transaction.
+message SigningInput {
+  // Transaction fee
+  int32 fee = 1;
+
+  // Account sequence
+  int64 sequence = 2;
+
+  // Source account
+  string account = 3;
+
+  // The secret private key used for signing (32 bytes).
+  bytes private_key = 4;
+
+  // Wellknown passphrase, specific to the chain
+  string passphrase = 5;
+
+  // Payload message
+  oneof operation_oneof {
+    OperationCreateAccount op_create_account = 6;
+    OperationPayment op_payment = 7;
+    OperationChangeTrust op_change_trust = 8;
+    OperationCreateClaimableBalance op_create_claimable_balance = 14;
+    OperationClaimClaimableBalance op_claim_claimable_balance = 15;
+  }
+
+  // Memo
+  oneof memo_type_oneof {
+    MemoVoid memo_void = 9;
+    MemoText memo_text = 10;
+    MemoId memo_id = 11;
+    MemoHash memo_hash = 12;
+    MemoHash memo_return_hash = 13;
+  }
+
+  int64 time_bounds = 16;
+}
+
+// Result containing the signed and encoded transaction.
+message SigningOutput {
+  // Signature.
+  string signature = 1;
+
+  // error code, 0 is ok, other codes will be treated as errors
+  SigningError error = 2;
+
+  // error code description
+  string error_message = 3;
+}
