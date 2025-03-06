@@ -1,4 +1,4 @@
-module github.com/vultisig/commondata
+module github.com/THORWallet/commondataTW_v2
 
 go 1.22.2
 

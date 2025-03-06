@@ -1,7 +1,7 @@
 syntax = "proto3";
 package vultisig.vault.v1;
 
-option go_package = "github.com/vultisig/commondata/go/vultisig/vault/v1;v1";
+option go_package = "github.com/THORWallet/commondataTW_v2/go/vultisig/vault/v1;v1";
 option java_package = "vultisig.vault.v1";
 option swift_prefix = "VS";
 
