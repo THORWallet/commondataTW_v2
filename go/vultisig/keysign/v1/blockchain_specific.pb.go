@@ -69,173 +69,22 @@ func (TransactionType) EnumDescriptor() ([]byte, []int) {
 	return file_vultisig_keysign_v1_blockchain_specific_proto_rawDescGZIP(), []int{0}
 }
 
-type SigningError int32
-
-const (
-	// This is the OK case, with value=0
-	SigningError_OK SigningError = 0
-	// Chain-generic codes:
-	// Generic error (used if there is no suitable specific error is adequate)
-	SigningError_Error_general SigningError = 1
-	// Internal error, indicates some very unusual, unexpected case
-	SigningError_Error_internal SigningError = 2
-	// Chain-generic codes, input related:
-	// Low balance: the sender balance is not enough to cover the send and other auxiliary amount such as fee, deposit, or minimal balance.
-	SigningError_Error_low_balance SigningError = 3
-	// Requested amount is zero, send of 0 makes no sense
-	SigningError_Error_zero_amount_requested SigningError = 4
-	// One required key is missing (too few or wrong keys are provided)
-	SigningError_Error_missing_private_key SigningError = 5
-	// A private key provided is invalid (e.g. wrong size, usually should be 32 bytes)
-	SigningError_Error_invalid_private_key SigningError = 15
-	// A provided address (e.g. destination address) is invalid
-	SigningError_Error_invalid_address SigningError = 16
-	// A provided input UTXO is invalid
-	SigningError_Error_invalid_utxo SigningError = 17
-	// The amount of an input UTXO is invalid
-	SigningError_Error_invalid_utxo_amount SigningError = 18
-	// Chain-generic, fee related:
-	// Wrong fee is given, probably it is too low to cover minimal fee for the transaction
-	SigningError_Error_wrong_fee SigningError = 6
-	// Chain-generic, signing related:
-	// General signing error
-	SigningError_Error_signing SigningError = 7
-	// Resulting transaction is too large
-	// [NEO] Transaction too big, fee in GAS needed or try send by parts
-	SigningError_Error_tx_too_big SigningError = 8
-	// UTXO-chain specific, input related:
-	// No input UTXOs provided [BTC]
-	SigningError_Error_missing_input_utxos SigningError = 9
-	// Not enough non-dust input UTXOs to cover requested amount (dust UTXOs are filtered out) [BTC]
-	SigningError_Error_not_enough_utxos SigningError = 10
-	// UTXO-chain specific, script related:
-	// [BTC] Missing required redeem script
-	SigningError_Error_script_redeem SigningError = 11
-	// [BTC] Invalid required output script
-	SigningError_Error_script_output SigningError = 12
-	// [BTC] Unrecognized witness program
-	SigningError_Error_script_witness_program SigningError = 13
-	// Invalid memo, e.g. [XRP] Invalid tag
-	SigningError_Error_invalid_memo SigningError = 14
-	// Some input field cannot be parsed
-	SigningError_Error_input_parse SigningError = 19
-	// Multi-input and multi-output transaction not supported
-	SigningError_Error_no_support_n2n SigningError = 20
-	// Incorrect count of signatures passed to compile
-	SigningError_Error_signatures_count SigningError = 21
-	// Incorrect input parameter
-	SigningError_Error_invalid_params SigningError = 22
-	// Invalid input token amount
-	SigningError_Error_invalid_requested_token_amount SigningError = 23
-	// Operation not supported for the chain.
-	SigningError_Error_not_supported SigningError = 24
-	// Requested amount is too low (less dust).
-	SigningError_Error_dust_amount_requested SigningError = 25
-)
-
-// Enum value maps for SigningError.
-var (
-	SigningError_name = map[int32]string{
-		0:  "OK",
-		1:  "Error_general",
-		2:  "Error_internal",
-		3:  "Error_low_balance",
-		4:  "Error_zero_amount_requested",
-		5:  "Error_missing_private_key",
-		15: "Error_invalid_private_key",
-		16: "Error_invalid_address",
-		17: "Error_invalid_utxo",
-		18: "Error_invalid_utxo_amount",
-		6:  "Error_wrong_fee",
-		7:  "Error_signing",
-		8:  "Error_tx_too_big",
-		9:  "Error_missing_input_utxos",
-		10: "Error_not_enough_utxos",
-		11: "Error_script_redeem",
-		12: "Error_script_output",
-		13: "Error_script_witness_program",
-		14: "Error_invalid_memo",
-		19: "Error_input_parse",
-		20: "Error_no_support_n2n",
-		21: "Error_signatures_count",
-		22: "Error_invalid_params",
-		23: "Error_invalid_requested_token_amount",
-		24: "Error_not_supported",
-		25: "Error_dust_amount_requested",
-	}
-	SigningError_value = map[string]int32{
-		"OK":                                   0,
-		"Error_general":                        1,
-		"Error_internal":                       2,
-		"Error_low_balance":                    3,
-		"Error_zero_amount_requested":          4,
-		"Error_missing_private_key":            5,
-		"Error_invalid_private_key":            15,
-		"Error_invalid_address":                16,
-		"Error_invalid_utxo":                   17,
-		"Error_invalid_utxo_amount":            18,
-		"Error_wrong_fee":                      6,
-		"Error_signing":                        7,
-		"Error_tx_too_big":                     8,
-		"Error_missing_input_utxos":            9,
-		"Error_not_enough_utxos":               10,
-		"Error_script_redeem":                  11,
-		"Error_script_output":                  12,
-		"Error_script_witness_program":         13,
-		"Error_invalid_memo":                   14,
-		"Error_input_parse":                    19,
-		"Error_no_support_n2n":                 20,
-		"Error_signatures_count":               21,
-		"Error_invalid_params":                 22,
-		"Error_invalid_requested_token_amount": 23,
-		"Error_not_supported":                  24,
-		"Error_dust_amount_requested":          25,
-	}
-)
-
-func (x SigningError) Enum() *SigningError {
-	p := new(SigningError)
-	*p = x
-	return p
-}
-
-func (x SigningError) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (SigningError) Descriptor() protoreflect.EnumDescriptor {
-	return file_vultisig_keysign_v1_blockchain_specific_proto_enumTypes[1].Descriptor()
-}
-
-func (SigningError) Type() protoreflect.EnumType {
-	return &file_vultisig_keysign_v1_blockchain_specific_proto_enumTypes[1]
-}
-
-func (x SigningError) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Use SigningError.Descriptor instead.
-func (SigningError) EnumDescriptor() ([]byte, []int) {
-	return file_vultisig_keysign_v1_blockchain_specific_proto_rawDescGZIP(), []int{1}
-}
-
 // A predicate (used in claim)
 // Rest of predicates not currently supported
 // See https://github.com/stellar/stellar-protocol/blob/master/core/cap-0023.md
 type ClaimPredicate int32
 
 const (
-	ClaimPredicate_Predicate_unconditional ClaimPredicate = 0
+	ClaimPredicate_CLAIM_PREDICATE_PREDICATE_UNCONDITIONAL_UNSPECIFIED ClaimPredicate = 0
 )
 
 // Enum value maps for ClaimPredicate.
 var (
 	ClaimPredicate_name = map[int32]string{
-		0: "Predicate_unconditional",
+		0: "CLAIM_PREDICATE_PREDICATE_UNCONDITIONAL_UNSPECIFIED",
 	}
 	ClaimPredicate_value = map[string]int32{
-		"Predicate_unconditional": 0,
+		"CLAIM_PREDICATE_PREDICATE_UNCONDITIONAL_UNSPECIFIED": 0,
 	}
 )
 
@@ -250,11 +99,11 @@ func (x ClaimPredicate) String() string {
 }
 
 func (ClaimPredicate) Descriptor() protoreflect.EnumDescriptor {
-	return file_vultisig_keysign_v1_blockchain_specific_proto_enumTypes[2].Descriptor()
+	return file_vultisig_keysign_v1_blockchain_specific_proto_enumTypes[1].Descriptor()
 }
 
 func (ClaimPredicate) Type() protoreflect.EnumType {
-	return &file_vultisig_keysign_v1_blockchain_specific_proto_enumTypes[2]
+	return &file_vultisig_keysign_v1_blockchain_specific_proto_enumTypes[1]
 }
 
 func (x ClaimPredicate) Number() protoreflect.EnumNumber {
@@ -263,7 +112,7 @@ func (x ClaimPredicate) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use ClaimPredicate.Descriptor instead.
 func (ClaimPredicate) EnumDescriptor() ([]byte, []int) {
-	return file_vultisig_keysign_v1_blockchain_specific_proto_rawDescGZIP(), []int{2}
+	return file_vultisig_keysign_v1_blockchain_specific_proto_rawDescGZIP(), []int{1}
 }
 
 type UTXOSpecific struct {
@@ -1766,7 +1615,7 @@ func (x *Claimant) GetPredicate() ClaimPredicate {
 	if x != nil {
 		return x.Predicate
 	}
-	return ClaimPredicate_Predicate_unconditional
+	return ClaimPredicate_CLAIM_PREDICATE_PREDICATE_UNCONDITIONAL_UNSPECIFIED
 }
 
 // Create a claimable balance (2-phase transfer)
@@ -2342,7 +2191,7 @@ type SigningOutput struct {
 	// Signature.
 	Signature string `protobuf:"bytes,1,opt,name=signature,proto3" json:"signature,omitempty"`
 	// error code, 0 is ok, other codes will be treated as errors
-	Error SigningError `protobuf:"varint,2,opt,name=error,proto3,enum=vultisig.keysign.v1.SigningError" json:"error,omitempty"`
+	Error int32 `protobuf:"varint,2,opt,name=error,proto3" json:"error,omitempty"`
 	// error code description
 	ErrorMessage string `protobuf:"bytes,3,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
 }
@@ -2386,11 +2235,11 @@ func (x *SigningOutput) GetSignature() string {
 	return ""
 }
 
-func (x *SigningOutput) GetError() SigningError {
+func (x *SigningOutput) GetError() int32 {
 	if x != nil {
 		return x.Error
 	}
-	return SigningError_OK
+	return 0
 }
 
 func (x *SigningOutput) GetErrorMessage() string {
@@ -2741,69 +2590,25 @@ var file_vultisig_keysign_v1_blockchain_specific_proto_rawDesc = []byte{
 	0x74, 0x69, 0x6d, 0x65, 0x42, 0x6f, 0x75, 0x6e, 0x64, 0x73, 0x42, 0x11, 0x0a, 0x0f, 0x6f, 0x70,
 	0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x6f, 0x6e, 0x65, 0x6f, 0x66, 0x42, 0x11, 0x0a,
 	0x0f, 0x6d, 0x65, 0x6d, 0x6f, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x5f, 0x6f, 0x6e, 0x65, 0x6f, 0x66,
-	0x22, 0x8b, 0x01, 0x0a, 0x0d, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x4f, 0x75, 0x74, 0x70,
-	0x75, 0x74, 0x12, 0x1c, 0x0a, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65,
-	0x12, 0x37, 0x0a, 0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32,
-	0x21, 0x2e, 0x76, 0x75, 0x6c, 0x74, 0x69, 0x73, 0x69, 0x67, 0x2e, 0x6b, 0x65, 0x79, 0x73, 0x69,
-	0x67, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x45, 0x72, 0x72,
-	0x6f, 0x72, 0x52, 0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x12, 0x23, 0x0a, 0x0d, 0x65, 0x72, 0x72,
-	0x6f, 0x72, 0x5f, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x0c, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x2a, 0x6d,
-	0x0a, 0x0f, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70,
-	0x65, 0x12, 0x20, 0x0a, 0x1c, 0x54, 0x52, 0x41, 0x4e, 0x53, 0x41, 0x43, 0x54, 0x49, 0x4f, 0x4e,
-	0x5f, 0x54, 0x59, 0x50, 0x45, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45,
-	0x44, 0x10, 0x00, 0x12, 0x19, 0x0a, 0x15, 0x54, 0x52, 0x41, 0x4e, 0x53, 0x41, 0x43, 0x54, 0x49,
-	0x4f, 0x4e, 0x5f, 0x54, 0x59, 0x50, 0x45, 0x5f, 0x56, 0x4f, 0x54, 0x45, 0x10, 0x01, 0x12, 0x1d,
-	0x0a, 0x19, 0x54, 0x52, 0x41, 0x4e, 0x53, 0x41, 0x43, 0x54, 0x49, 0x4f, 0x4e, 0x5f, 0x54, 0x59,
-	0x50, 0x45, 0x5f, 0x50, 0x52, 0x4f, 0x50, 0x4f, 0x53, 0x41, 0x4c, 0x10, 0x02, 0x2a, 0xb5, 0x05,
-	0x0a, 0x0c, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x12, 0x06,
-	0x0a, 0x02, 0x4f, 0x4b, 0x10, 0x00, 0x12, 0x11, 0x0a, 0x0d, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x5f,
-	0x67, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x6c, 0x10, 0x01, 0x12, 0x12, 0x0a, 0x0e, 0x45, 0x72, 0x72,
-	0x6f, 0x72, 0x5f, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x10, 0x02, 0x12, 0x15, 0x0a,
-	0x11, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x5f, 0x6c, 0x6f, 0x77, 0x5f, 0x62, 0x61, 0x6c, 0x61, 0x6e,
-	0x63, 0x65, 0x10, 0x03, 0x12, 0x1f, 0x0a, 0x1b, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x5f, 0x7a, 0x65,
-	0x72, 0x6f, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x65, 0x64, 0x10, 0x04, 0x12, 0x1d, 0x0a, 0x19, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x5f, 0x6d,
-	0x69, 0x73, 0x73, 0x69, 0x6e, 0x67, 0x5f, 0x70, 0x72, 0x69, 0x76, 0x61, 0x74, 0x65, 0x5f, 0x6b,
-	0x65, 0x79, 0x10, 0x05, 0x12, 0x1d, 0x0a, 0x19, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x5f, 0x69, 0x6e,
-	0x76, 0x61, 0x6c, 0x69, 0x64, 0x5f, 0x70, 0x72, 0x69, 0x76, 0x61, 0x74, 0x65, 0x5f, 0x6b, 0x65,
-	0x79, 0x10, 0x0f, 0x12, 0x19, 0x0a, 0x15, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x5f, 0x69, 0x6e, 0x76,
-	0x61, 0x6c, 0x69, 0x64, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x10, 0x10, 0x12, 0x16,
-	0x0a, 0x12, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x5f, 0x69, 0x6e, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x5f,
-	0x75, 0x74, 0x78, 0x6f, 0x10, 0x11, 0x12, 0x1d, 0x0a, 0x19, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x5f,
-	0x69, 0x6e, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x5f, 0x75, 0x74, 0x78, 0x6f, 0x5f, 0x61, 0x6d, 0x6f,
-	0x75, 0x6e, 0x74, 0x10, 0x12, 0x12, 0x13, 0x0a, 0x0f, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x5f, 0x77,
-	0x72, 0x6f, 0x6e, 0x67, 0x5f, 0x66, 0x65, 0x65, 0x10, 0x06, 0x12, 0x11, 0x0a, 0x0d, 0x45, 0x72,
-	0x72, 0x6f, 0x72, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x10, 0x07, 0x12, 0x14, 0x0a,
-	0x10, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x5f, 0x74, 0x78, 0x5f, 0x74, 0x6f, 0x6f, 0x5f, 0x62, 0x69,
-	0x67, 0x10, 0x08, 0x12, 0x1d, 0x0a, 0x19, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x5f, 0x6d, 0x69, 0x73,
-	0x73, 0x69, 0x6e, 0x67, 0x5f, 0x69, 0x6e, 0x70, 0x75, 0x74, 0x5f, 0x75, 0x74, 0x78, 0x6f, 0x73,
-	0x10, 0x09, 0x12, 0x1a, 0x0a, 0x16, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x5f, 0x6e, 0x6f, 0x74, 0x5f,
-	0x65, 0x6e, 0x6f, 0x75, 0x67, 0x68, 0x5f, 0x75, 0x74, 0x78, 0x6f, 0x73, 0x10, 0x0a, 0x12, 0x17,
-	0x0a, 0x13, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x5f, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x5f, 0x72,
-	0x65, 0x64, 0x65, 0x65, 0x6d, 0x10, 0x0b, 0x12, 0x17, 0x0a, 0x13, 0x45, 0x72, 0x72, 0x6f, 0x72,
-	0x5f, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x5f, 0x6f, 0x75, 0x74, 0x70, 0x75, 0x74, 0x10, 0x0c,
-	0x12, 0x20, 0x0a, 0x1c, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x5f, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74,
-	0x5f, 0x77, 0x69, 0x74, 0x6e, 0x65, 0x73, 0x73, 0x5f, 0x70, 0x72, 0x6f, 0x67, 0x72, 0x61, 0x6d,
-	0x10, 0x0d, 0x12, 0x16, 0x0a, 0x12, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x5f, 0x69, 0x6e, 0x76, 0x61,
-	0x6c, 0x69, 0x64, 0x5f, 0x6d, 0x65, 0x6d, 0x6f, 0x10, 0x0e, 0x12, 0x15, 0x0a, 0x11, 0x45, 0x72,
-	0x72, 0x6f, 0x72, 0x5f, 0x69, 0x6e, 0x70, 0x75, 0x74, 0x5f, 0x70, 0x61, 0x72, 0x73, 0x65, 0x10,
-	0x13, 0x12, 0x18, 0x0a, 0x14, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x5f, 0x6e, 0x6f, 0x5f, 0x73, 0x75,
-	0x70, 0x70, 0x6f, 0x72, 0x74, 0x5f, 0x6e, 0x32, 0x6e, 0x10, 0x14, 0x12, 0x1a, 0x0a, 0x16, 0x45,
-	0x72, 0x72, 0x6f, 0x72, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73, 0x5f,
-	0x63, 0x6f, 0x75, 0x6e, 0x74, 0x10, 0x15, 0x12, 0x18, 0x0a, 0x14, 0x45, 0x72, 0x72, 0x6f, 0x72,
-	0x5f, 0x69, 0x6e, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x5f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x10,
-	0x16, 0x12, 0x28, 0x0a, 0x24, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x5f, 0x69, 0x6e, 0x76, 0x61, 0x6c,
-	0x69, 0x64, 0x5f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x65, 0x64, 0x5f, 0x74, 0x6f, 0x6b,
-	0x65, 0x6e, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x10, 0x17, 0x12, 0x17, 0x0a, 0x13, 0x45,
-	0x72, 0x72, 0x6f, 0x72, 0x5f, 0x6e, 0x6f, 0x74, 0x5f, 0x73, 0x75, 0x70, 0x70, 0x6f, 0x72, 0x74,
-	0x65, 0x64, 0x10, 0x18, 0x12, 0x1f, 0x0a, 0x1b, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x5f, 0x64, 0x75,
-	0x73, 0x74, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x65, 0x64, 0x10, 0x19, 0x2a, 0x2d, 0x0a, 0x0e, 0x43, 0x6c, 0x61, 0x69, 0x6d, 0x50, 0x72,
-	0x65, 0x64, 0x69, 0x63, 0x61, 0x74, 0x65, 0x12, 0x1b, 0x0a, 0x17, 0x50, 0x72, 0x65, 0x64, 0x69,
-	0x63, 0x61, 0x74, 0x65, 0x5f, 0x75, 0x6e, 0x63, 0x6f, 0x6e, 0x64, 0x69, 0x74, 0x69, 0x6f, 0x6e,
-	0x61, 0x6c, 0x10, 0x00, 0x42, 0x54, 0x0a, 0x13, 0x76, 0x75, 0x6c, 0x74, 0x69, 0x73, 0x69, 0x67,
+	0x22, 0x68, 0x0a, 0x0d, 0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x4f, 0x75, 0x74, 0x70, 0x75,
+	0x74, 0x12, 0x1c, 0x0a, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x12,
+	0x14, 0x0a, 0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x05,
+	0x65, 0x72, 0x72, 0x6f, 0x72, 0x12, 0x23, 0x0a, 0x0d, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x5f, 0x6d,
+	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x65, 0x72,
+	0x72, 0x6f, 0x72, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x2a, 0x6d, 0x0a, 0x0f, 0x54, 0x72,
+	0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x12, 0x20, 0x0a,
+	0x1c, 0x54, 0x52, 0x41, 0x4e, 0x53, 0x41, 0x43, 0x54, 0x49, 0x4f, 0x4e, 0x5f, 0x54, 0x59, 0x50,
+	0x45, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x12,
+	0x19, 0x0a, 0x15, 0x54, 0x52, 0x41, 0x4e, 0x53, 0x41, 0x43, 0x54, 0x49, 0x4f, 0x4e, 0x5f, 0x54,
+	0x59, 0x50, 0x45, 0x5f, 0x56, 0x4f, 0x54, 0x45, 0x10, 0x01, 0x12, 0x1d, 0x0a, 0x19, 0x54, 0x52,
+	0x41, 0x4e, 0x53, 0x41, 0x43, 0x54, 0x49, 0x4f, 0x4e, 0x5f, 0x54, 0x59, 0x50, 0x45, 0x5f, 0x50,
+	0x52, 0x4f, 0x50, 0x4f, 0x53, 0x41, 0x4c, 0x10, 0x02, 0x2a, 0x49, 0x0a, 0x0e, 0x43, 0x6c, 0x61,
+	0x69, 0x6d, 0x50, 0x72, 0x65, 0x64, 0x69, 0x63, 0x61, 0x74, 0x65, 0x12, 0x37, 0x0a, 0x33, 0x43,
+	0x4c, 0x41, 0x49, 0x4d, 0x5f, 0x50, 0x52, 0x45, 0x44, 0x49, 0x43, 0x41, 0x54, 0x45, 0x5f, 0x50,
+	0x52, 0x45, 0x44, 0x49, 0x43, 0x41, 0x54, 0x45, 0x5f, 0x55, 0x4e, 0x43, 0x4f, 0x4e, 0x44, 0x49,
+	0x54, 0x49, 0x4f, 0x4e, 0x41, 0x4c, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49,
+	0x45, 0x44, 0x10, 0x00, 0x42, 0x54, 0x0a, 0x13, 0x76, 0x75, 0x6c, 0x74, 0x69, 0x73, 0x69, 0x67,
 	0x2e, 0x6b, 0x65, 0x79, 0x73, 0x69, 0x67, 0x6e, 0x2e, 0x76, 0x31, 0x5a, 0x38, 0x67, 0x69, 0x74,
 	0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x76, 0x75, 0x6c, 0x74, 0x69, 0x73, 0x69, 0x67,
 	0x2f, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x64, 0x61, 0x74, 0x61, 0x2f, 0x67, 0x6f, 0x2f, 0x76,
@@ -2824,75 +2629,73 @@ func file_vultisig_keysign_v1_blockchain_specific_proto_rawDescGZIP() []byte {
 	return file_vultisig_keysign_v1_blockchain_specific_proto_rawDescData
 }
 
-var file_vultisig_keysign_v1_blockchain_specific_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
+var file_vultisig_keysign_v1_blockchain_specific_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
 var file_vultisig_keysign_v1_blockchain_specific_proto_msgTypes = make([]protoimpl.MessageInfo, 27)
 var file_vultisig_keysign_v1_blockchain_specific_proto_goTypes = []any{
 	(TransactionType)(0),                    // 0: vultisig.keysign.v1.TransactionType
-	(SigningError)(0),                       // 1: vultisig.keysign.v1.SigningError
-	(ClaimPredicate)(0),                     // 2: vultisig.keysign.v1.ClaimPredicate
-	(*UTXOSpecific)(nil),                    // 3: vultisig.keysign.v1.UTXOSpecific
-	(*EthereumSpecific)(nil),                // 4: vultisig.keysign.v1.EthereumSpecific
-	(*THORChainSpecific)(nil),               // 5: vultisig.keysign.v1.THORChainSpecific
-	(*MAYAChainSpecific)(nil),               // 6: vultisig.keysign.v1.MAYAChainSpecific
-	(*CosmosSpecific)(nil),                  // 7: vultisig.keysign.v1.CosmosSpecific
-	(*CosmosIbcDenomTrace)(nil),             // 8: vultisig.keysign.v1.CosmosIbcDenomTrace
-	(*SolanaSpecific)(nil),                  // 9: vultisig.keysign.v1.SolanaSpecific
-	(*PolkadotSpecific)(nil),                // 10: vultisig.keysign.v1.PolkadotSpecific
-	(*SuiCoin)(nil),                         // 11: vultisig.keysign.v1.SuiCoin
-	(*SuiSpecific)(nil),                     // 12: vultisig.keysign.v1.SuiSpecific
-	(*TonSpecific)(nil),                     // 13: vultisig.keysign.v1.TonSpecific
-	(*RippleSpecific)(nil),                  // 14: vultisig.keysign.v1.RippleSpecific
-	(*TronSpecific)(nil),                    // 15: vultisig.keysign.v1.TronSpecific
-	(*StellarSpecific)(nil),                 // 16: vultisig.keysign.v1.StellarSpecific
-	(*Asset)(nil),                           // 17: vultisig.keysign.v1.Asset
-	(*OperationCreateAccount)(nil),          // 18: vultisig.keysign.v1.OperationCreateAccount
-	(*OperationPayment)(nil),                // 19: vultisig.keysign.v1.OperationPayment
-	(*OperationChangeTrust)(nil),            // 20: vultisig.keysign.v1.OperationChangeTrust
-	(*Claimant)(nil),                        // 21: vultisig.keysign.v1.Claimant
-	(*OperationCreateClaimableBalance)(nil), // 22: vultisig.keysign.v1.OperationCreateClaimableBalance
-	(*OperationClaimClaimableBalance)(nil),  // 23: vultisig.keysign.v1.OperationClaimClaimableBalance
-	(*MemoVoid)(nil),                        // 24: vultisig.keysign.v1.MemoVoid
-	(*MemoText)(nil),                        // 25: vultisig.keysign.v1.MemoText
-	(*MemoId)(nil),                          // 26: vultisig.keysign.v1.MemoId
-	(*MemoHash)(nil),                        // 27: vultisig.keysign.v1.MemoHash
-	(*SigningInput)(nil),                    // 28: vultisig.keysign.v1.SigningInput
-	(*SigningOutput)(nil),                   // 29: vultisig.keysign.v1.SigningOutput
+	(ClaimPredicate)(0),                     // 1: vultisig.keysign.v1.ClaimPredicate
+	(*UTXOSpecific)(nil),                    // 2: vultisig.keysign.v1.UTXOSpecific
+	(*EthereumSpecific)(nil),                // 3: vultisig.keysign.v1.EthereumSpecific
+	(*THORChainSpecific)(nil),               // 4: vultisig.keysign.v1.THORChainSpecific
+	(*MAYAChainSpecific)(nil),               // 5: vultisig.keysign.v1.MAYAChainSpecific
+	(*CosmosSpecific)(nil),                  // 6: vultisig.keysign.v1.CosmosSpecific
+	(*CosmosIbcDenomTrace)(nil),             // 7: vultisig.keysign.v1.CosmosIbcDenomTrace
+	(*SolanaSpecific)(nil),                  // 8: vultisig.keysign.v1.SolanaSpecific
+	(*PolkadotSpecific)(nil),                // 9: vultisig.keysign.v1.PolkadotSpecific
+	(*SuiCoin)(nil),                         // 10: vultisig.keysign.v1.SuiCoin
+	(*SuiSpecific)(nil),                     // 11: vultisig.keysign.v1.SuiSpecific
+	(*TonSpecific)(nil),                     // 12: vultisig.keysign.v1.TonSpecific
+	(*RippleSpecific)(nil),                  // 13: vultisig.keysign.v1.RippleSpecific
+	(*TronSpecific)(nil),                    // 14: vultisig.keysign.v1.TronSpecific
+	(*StellarSpecific)(nil),                 // 15: vultisig.keysign.v1.StellarSpecific
+	(*Asset)(nil),                           // 16: vultisig.keysign.v1.Asset
+	(*OperationCreateAccount)(nil),          // 17: vultisig.keysign.v1.OperationCreateAccount
+	(*OperationPayment)(nil),                // 18: vultisig.keysign.v1.OperationPayment
+	(*OperationChangeTrust)(nil),            // 19: vultisig.keysign.v1.OperationChangeTrust
+	(*Claimant)(nil),                        // 20: vultisig.keysign.v1.Claimant
+	(*OperationCreateClaimableBalance)(nil), // 21: vultisig.keysign.v1.OperationCreateClaimableBalance
+	(*OperationClaimClaimableBalance)(nil),  // 22: vultisig.keysign.v1.OperationClaimClaimableBalance
+	(*MemoVoid)(nil),                        // 23: vultisig.keysign.v1.MemoVoid
+	(*MemoText)(nil),                        // 24: vultisig.keysign.v1.MemoText
+	(*MemoId)(nil),                          // 25: vultisig.keysign.v1.MemoId
+	(*MemoHash)(nil),                        // 26: vultisig.keysign.v1.MemoHash
+	(*SigningInput)(nil),                    // 27: vultisig.keysign.v1.SigningInput
+	(*SigningOutput)(nil),                   // 28: vultisig.keysign.v1.SigningOutput
 }
 var file_vultisig_keysign_v1_blockchain_specific_proto_depIdxs = []int32{
 	0,  // 0: vultisig.keysign.v1.CosmosSpecific.transaction_type:type_name -> vultisig.keysign.v1.TransactionType
-	8,  // 1: vultisig.keysign.v1.CosmosSpecific.ibc_denom_traces:type_name -> vultisig.keysign.v1.CosmosIbcDenomTrace
-	11, // 2: vultisig.keysign.v1.SuiSpecific.coins:type_name -> vultisig.keysign.v1.SuiCoin
-	18, // 3: vultisig.keysign.v1.StellarSpecific.op_create_account:type_name -> vultisig.keysign.v1.OperationCreateAccount
-	19, // 4: vultisig.keysign.v1.StellarSpecific.op_payment:type_name -> vultisig.keysign.v1.OperationPayment
-	20, // 5: vultisig.keysign.v1.StellarSpecific.op_change_trust:type_name -> vultisig.keysign.v1.OperationChangeTrust
-	22, // 6: vultisig.keysign.v1.StellarSpecific.op_create_claimable_balance:type_name -> vultisig.keysign.v1.OperationCreateClaimableBalance
-	23, // 7: vultisig.keysign.v1.StellarSpecific.op_claim_claimable_balance:type_name -> vultisig.keysign.v1.OperationClaimClaimableBalance
-	24, // 8: vultisig.keysign.v1.StellarSpecific.memo_void:type_name -> vultisig.keysign.v1.MemoVoid
-	25, // 9: vultisig.keysign.v1.StellarSpecific.memo_text:type_name -> vultisig.keysign.v1.MemoText
-	26, // 10: vultisig.keysign.v1.StellarSpecific.memo_id:type_name -> vultisig.keysign.v1.MemoId
-	27, // 11: vultisig.keysign.v1.StellarSpecific.memo_hash:type_name -> vultisig.keysign.v1.MemoHash
-	27, // 12: vultisig.keysign.v1.StellarSpecific.memo_return_hash:type_name -> vultisig.keysign.v1.MemoHash
-	17, // 13: vultisig.keysign.v1.OperationPayment.asset:type_name -> vultisig.keysign.v1.Asset
-	17, // 14: vultisig.keysign.v1.OperationChangeTrust.asset:type_name -> vultisig.keysign.v1.Asset
-	2,  // 15: vultisig.keysign.v1.Claimant.predicate:type_name -> vultisig.keysign.v1.ClaimPredicate
-	17, // 16: vultisig.keysign.v1.OperationCreateClaimableBalance.asset:type_name -> vultisig.keysign.v1.Asset
-	21, // 17: vultisig.keysign.v1.OperationCreateClaimableBalance.claimants:type_name -> vultisig.keysign.v1.Claimant
-	18, // 18: vultisig.keysign.v1.SigningInput.op_create_account:type_name -> vultisig.keysign.v1.OperationCreateAccount
-	19, // 19: vultisig.keysign.v1.SigningInput.op_payment:type_name -> vultisig.keysign.v1.OperationPayment
-	20, // 20: vultisig.keysign.v1.SigningInput.op_change_trust:type_name -> vultisig.keysign.v1.OperationChangeTrust
-	22, // 21: vultisig.keysign.v1.SigningInput.op_create_claimable_balance:type_name -> vultisig.keysign.v1.OperationCreateClaimableBalance
-	23, // 22: vultisig.keysign.v1.SigningInput.op_claim_claimable_balance:type_name -> vultisig.keysign.v1.OperationClaimClaimableBalance
-	24, // 23: vultisig.keysign.v1.SigningInput.memo_void:type_name -> vultisig.keysign.v1.MemoVoid
-	25, // 24: vultisig.keysign.v1.SigningInput.memo_text:type_name -> vultisig.keysign.v1.MemoText
-	26, // 25: vultisig.keysign.v1.SigningInput.memo_id:type_name -> vultisig.keysign.v1.MemoId
-	27, // 26: vultisig.keysign.v1.SigningInput.memo_hash:type_name -> vultisig.keysign.v1.MemoHash
-	27, // 27: vultisig.keysign.v1.SigningInput.memo_return_hash:type_name -> vultisig.keysign.v1.MemoHash
-	1,  // 28: vultisig.keysign.v1.SigningOutput.error:type_name -> vultisig.keysign.v1.SigningError
-	29, // [29:29] is the sub-list for method output_type
-	29, // [29:29] is the sub-list for method input_type
-	29, // [29:29] is the sub-list for extension type_name
-	29, // [29:29] is the sub-list for extension extendee
-	0,  // [0:29] is the sub-list for field type_name
+	7,  // 1: vultisig.keysign.v1.CosmosSpecific.ibc_denom_traces:type_name -> vultisig.keysign.v1.CosmosIbcDenomTrace
+	10, // 2: vultisig.keysign.v1.SuiSpecific.coins:type_name -> vultisig.keysign.v1.SuiCoin
+	17, // 3: vultisig.keysign.v1.StellarSpecific.op_create_account:type_name -> vultisig.keysign.v1.OperationCreateAccount
+	18, // 4: vultisig.keysign.v1.StellarSpecific.op_payment:type_name -> vultisig.keysign.v1.OperationPayment
+	19, // 5: vultisig.keysign.v1.StellarSpecific.op_change_trust:type_name -> vultisig.keysign.v1.OperationChangeTrust
+	21, // 6: vultisig.keysign.v1.StellarSpecific.op_create_claimable_balance:type_name -> vultisig.keysign.v1.OperationCreateClaimableBalance
+	22, // 7: vultisig.keysign.v1.StellarSpecific.op_claim_claimable_balance:type_name -> vultisig.keysign.v1.OperationClaimClaimableBalance
+	23, // 8: vultisig.keysign.v1.StellarSpecific.memo_void:type_name -> vultisig.keysign.v1.MemoVoid
+	24, // 9: vultisig.keysign.v1.StellarSpecific.memo_text:type_name -> vultisig.keysign.v1.MemoText
+	25, // 10: vultisig.keysign.v1.StellarSpecific.memo_id:type_name -> vultisig.keysign.v1.MemoId
+	26, // 11: vultisig.keysign.v1.StellarSpecific.memo_hash:type_name -> vultisig.keysign.v1.MemoHash
+	26, // 12: vultisig.keysign.v1.StellarSpecific.memo_return_hash:type_name -> vultisig.keysign.v1.MemoHash
+	16, // 13: vultisig.keysign.v1.OperationPayment.asset:type_name -> vultisig.keysign.v1.Asset
+	16, // 14: vultisig.keysign.v1.OperationChangeTrust.asset:type_name -> vultisig.keysign.v1.Asset
+	1,  // 15: vultisig.keysign.v1.Claimant.predicate:type_name -> vultisig.keysign.v1.ClaimPredicate
+	16, // 16: vultisig.keysign.v1.OperationCreateClaimableBalance.asset:type_name -> vultisig.keysign.v1.Asset
+	20, // 17: vultisig.keysign.v1.OperationCreateClaimableBalance.claimants:type_name -> vultisig.keysign.v1.Claimant
+	17, // 18: vultisig.keysign.v1.SigningInput.op_create_account:type_name -> vultisig.keysign.v1.OperationCreateAccount
+	18, // 19: vultisig.keysign.v1.SigningInput.op_payment:type_name -> vultisig.keysign.v1.OperationPayment
+	19, // 20: vultisig.keysign.v1.SigningInput.op_change_trust:type_name -> vultisig.keysign.v1.OperationChangeTrust
+	21, // 21: vultisig.keysign.v1.SigningInput.op_create_claimable_balance:type_name -> vultisig.keysign.v1.OperationCreateClaimableBalance
+	22, // 22: vultisig.keysign.v1.SigningInput.op_claim_claimable_balance:type_name -> vultisig.keysign.v1.OperationClaimClaimableBalance
+	23, // 23: vultisig.keysign.v1.SigningInput.memo_void:type_name -> vultisig.keysign.v1.MemoVoid
+	24, // 24: vultisig.keysign.v1.SigningInput.memo_text:type_name -> vultisig.keysign.v1.MemoText
+	25, // 25: vultisig.keysign.v1.SigningInput.memo_id:type_name -> vultisig.keysign.v1.MemoId
+	26, // 26: vultisig.keysign.v1.SigningInput.memo_hash:type_name -> vultisig.keysign.v1.MemoHash
+	26, // 27: vultisig.keysign.v1.SigningInput.memo_return_hash:type_name -> vultisig.keysign.v1.MemoHash
+	28, // [28:28] is the sub-list for method output_type
+	28, // [28:28] is the sub-list for method input_type
+	28, // [28:28] is the sub-list for extension type_name
+	28, // [28:28] is the sub-list for extension extendee
+	0,  // [0:28] is the sub-list for field type_name
 }
 
 func init() { file_vultisig_keysign_v1_blockchain_specific_proto_init() }
@@ -3257,7 +3060,7 @@ func file_vultisig_keysign_v1_blockchain_specific_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_vultisig_keysign_v1_blockchain_specific_proto_rawDesc,
-			NumEnums:      3,
+			NumEnums:      2,
 			NumMessages:   27,
 			NumExtensions: 0,
 			NumServices:   0,

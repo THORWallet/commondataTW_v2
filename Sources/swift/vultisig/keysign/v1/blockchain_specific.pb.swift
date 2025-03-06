@@ -64,223 +64,28 @@ extension VSTransactionType: CaseIterable {
 
 #endif  // swift(>=4.2)
 
-public enum VSSigningError: SwiftProtobuf.Enum {
-  public typealias RawValue = Int
-
-  /// This is the OK case, with value=0
-  case ok // = 0
-
-  /// Chain-generic codes:
-  /// Generic error (used if there is no suitable specific error is adequate)
-  case errorGeneral // = 1
-
-  /// Internal error, indicates some very unusual, unexpected case
-  case errorInternal // = 2
-
-  /// Chain-generic codes, input related:
-  /// Low balance: the sender balance is not enough to cover the send and other auxiliary amount such as fee, deposit, or minimal balance.
-  case errorLowBalance // = 3
-
-  /// Requested amount is zero, send of 0 makes no sense
-  case errorZeroAmountRequested // = 4
-
-  /// One required key is missing (too few or wrong keys are provided)
-  case errorMissingPrivateKey // = 5
-
-  /// A private key provided is invalid (e.g. wrong size, usually should be 32 bytes)
-  case errorInvalidPrivateKey // = 15
-
-  /// A provided address (e.g. destination address) is invalid
-  case errorInvalidAddress // = 16
-
-  /// A provided input UTXO is invalid
-  case errorInvalidUtxo // = 17
-
-  /// The amount of an input UTXO is invalid
-  case errorInvalidUtxoAmount // = 18
-
-  /// Chain-generic, fee related:
-  /// Wrong fee is given, probably it is too low to cover minimal fee for the transaction
-  case errorWrongFee // = 6
-
-  /// Chain-generic, signing related:
-  /// General signing error
-  case errorSigning // = 7
-
-  /// Resulting transaction is too large
-  /// [NEO] Transaction too big, fee in GAS needed or try send by parts
-  case errorTxTooBig // = 8
-
-  /// UTXO-chain specific, input related:
-  /// No input UTXOs provided [BTC]
-  case errorMissingInputUtxos // = 9
-
-  /// Not enough non-dust input UTXOs to cover requested amount (dust UTXOs are filtered out) [BTC]
-  case errorNotEnoughUtxos // = 10
-
-  /// UTXO-chain specific, script related:
-  /// [BTC] Missing required redeem script
-  case errorScriptRedeem // = 11
-
-  /// [BTC] Invalid required output script
-  case errorScriptOutput // = 12
-
-  /// [BTC] Unrecognized witness program
-  case errorScriptWitnessProgram // = 13
-
-  /// Invalid memo, e.g. [XRP] Invalid tag
-  case errorInvalidMemo // = 14
-
-  /// Some input field cannot be parsed
-  case errorInputParse // = 19
-
-  /// Multi-input and multi-output transaction not supported
-  case errorNoSupportN2N // = 20
-
-  /// Incorrect count of signatures passed to compile
-  case errorSignaturesCount // = 21
-
-  /// Incorrect input parameter
-  case errorInvalidParams // = 22
-
-  /// Invalid input token amount
-  case errorInvalidRequestedTokenAmount // = 23
-
-  /// Operation not supported for the chain.
-  case errorNotSupported // = 24
-
-  /// Requested amount is too low (less dust).
-  case errorDustAmountRequested // = 25
-  case UNRECOGNIZED(Int)
-
-  public init() {
-    self = .ok
-  }
-
-  public init?(rawValue: Int) {
-    switch rawValue {
-    case 0: self = .ok
-    case 1: self = .errorGeneral
-    case 2: self = .errorInternal
-    case 3: self = .errorLowBalance
-    case 4: self = .errorZeroAmountRequested
-    case 5: self = .errorMissingPrivateKey
-    case 6: self = .errorWrongFee
-    case 7: self = .errorSigning
-    case 8: self = .errorTxTooBig
-    case 9: self = .errorMissingInputUtxos
-    case 10: self = .errorNotEnoughUtxos
-    case 11: self = .errorScriptRedeem
-    case 12: self = .errorScriptOutput
-    case 13: self = .errorScriptWitnessProgram
-    case 14: self = .errorInvalidMemo
-    case 15: self = .errorInvalidPrivateKey
-    case 16: self = .errorInvalidAddress
-    case 17: self = .errorInvalidUtxo
-    case 18: self = .errorInvalidUtxoAmount
-    case 19: self = .errorInputParse
-    case 20: self = .errorNoSupportN2N
-    case 21: self = .errorSignaturesCount
-    case 22: self = .errorInvalidParams
-    case 23: self = .errorInvalidRequestedTokenAmount
-    case 24: self = .errorNotSupported
-    case 25: self = .errorDustAmountRequested
-    default: self = .UNRECOGNIZED(rawValue)
-    }
-  }
-
-  public var rawValue: Int {
-    switch self {
-    case .ok: return 0
-    case .errorGeneral: return 1
-    case .errorInternal: return 2
-    case .errorLowBalance: return 3
-    case .errorZeroAmountRequested: return 4
-    case .errorMissingPrivateKey: return 5
-    case .errorWrongFee: return 6
-    case .errorSigning: return 7
-    case .errorTxTooBig: return 8
-    case .errorMissingInputUtxos: return 9
-    case .errorNotEnoughUtxos: return 10
-    case .errorScriptRedeem: return 11
-    case .errorScriptOutput: return 12
-    case .errorScriptWitnessProgram: return 13
-    case .errorInvalidMemo: return 14
-    case .errorInvalidPrivateKey: return 15
-    case .errorInvalidAddress: return 16
-    case .errorInvalidUtxo: return 17
-    case .errorInvalidUtxoAmount: return 18
-    case .errorInputParse: return 19
-    case .errorNoSupportN2N: return 20
-    case .errorSignaturesCount: return 21
-    case .errorInvalidParams: return 22
-    case .errorInvalidRequestedTokenAmount: return 23
-    case .errorNotSupported: return 24
-    case .errorDustAmountRequested: return 25
-    case .UNRECOGNIZED(let i): return i
-    }
-  }
-
-}
-
-#if swift(>=4.2)
-
-extension VSSigningError: CaseIterable {
-  // The compiler won't synthesize support with the UNRECOGNIZED case.
-  public static let allCases: [VSSigningError] = [
-    .ok,
-    .errorGeneral,
-    .errorInternal,
-    .errorLowBalance,
-    .errorZeroAmountRequested,
-    .errorMissingPrivateKey,
-    .errorInvalidPrivateKey,
-    .errorInvalidAddress,
-    .errorInvalidUtxo,
-    .errorInvalidUtxoAmount,
-    .errorWrongFee,
-    .errorSigning,
-    .errorTxTooBig,
-    .errorMissingInputUtxos,
-    .errorNotEnoughUtxos,
-    .errorScriptRedeem,
-    .errorScriptOutput,
-    .errorScriptWitnessProgram,
-    .errorInvalidMemo,
-    .errorInputParse,
-    .errorNoSupportN2N,
-    .errorSignaturesCount,
-    .errorInvalidParams,
-    .errorInvalidRequestedTokenAmount,
-    .errorNotSupported,
-    .errorDustAmountRequested,
-  ]
-}
-
-#endif  // swift(>=4.2)
-
 /// A predicate (used in claim)
 /// Rest of predicates not currently supported
 /// See https://github.com/stellar/stellar-protocol/blob/master/core/cap-0023.md
 public enum VSClaimPredicate: SwiftProtobuf.Enum {
   public typealias RawValue = Int
-  case predicateUnconditional // = 0
+  case predicateUnconditionalUnspecified // = 0
   case UNRECOGNIZED(Int)
 
   public init() {
-    self = .predicateUnconditional
+    self = .predicateUnconditionalUnspecified
   }
 
   public init?(rawValue: Int) {
     switch rawValue {
-    case 0: self = .predicateUnconditional
+    case 0: self = .predicateUnconditionalUnspecified
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
 
   public var rawValue: Int {
     switch self {
-    case .predicateUnconditional: return 0
+    case .predicateUnconditionalUnspecified: return 0
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -292,7 +97,7 @@ public enum VSClaimPredicate: SwiftProtobuf.Enum {
 extension VSClaimPredicate: CaseIterable {
   // The compiler won't synthesize support with the UNRECOGNIZED case.
   public static let allCases: [VSClaimPredicate] = [
-    .predicateUnconditional,
+    .predicateUnconditionalUnspecified,
   ]
 }
 
@@ -863,7 +668,7 @@ public struct VSClaimant {
   public var account: String = String()
 
   /// predicate
-  public var predicate: VSClaimPredicate = .predicateUnconditional
+  public var predicate: VSClaimPredicate = .predicateUnconditionalUnspecified
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -1167,7 +972,7 @@ public struct VSSigningOutput {
   public var signature: String = String()
 
   /// error code, 0 is ok, other codes will be treated as errors
-  public var error: VSSigningError = .ok
+  public var error: Int32 = 0
 
   /// error code description
   public var errorMessage: String = String()
@@ -1179,7 +984,6 @@ public struct VSSigningOutput {
 
 #if swift(>=5.5) && canImport(_Concurrency)
 extension VSTransactionType: @unchecked Sendable {}
-extension VSSigningError: @unchecked Sendable {}
 extension VSClaimPredicate: @unchecked Sendable {}
 extension VSUTXOSpecific: @unchecked Sendable {}
 extension VSEthereumSpecific: @unchecked Sendable {}
@@ -1226,40 +1030,9 @@ extension VSTransactionType: SwiftProtobuf._ProtoNameProviding {
   ]
 }
 
-extension VSSigningError: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "OK"),
-    1: .same(proto: "Error_general"),
-    2: .same(proto: "Error_internal"),
-    3: .same(proto: "Error_low_balance"),
-    4: .same(proto: "Error_zero_amount_requested"),
-    5: .same(proto: "Error_missing_private_key"),
-    6: .same(proto: "Error_wrong_fee"),
-    7: .same(proto: "Error_signing"),
-    8: .same(proto: "Error_tx_too_big"),
-    9: .same(proto: "Error_missing_input_utxos"),
-    10: .same(proto: "Error_not_enough_utxos"),
-    11: .same(proto: "Error_script_redeem"),
-    12: .same(proto: "Error_script_output"),
-    13: .same(proto: "Error_script_witness_program"),
-    14: .same(proto: "Error_invalid_memo"),
-    15: .same(proto: "Error_invalid_private_key"),
-    16: .same(proto: "Error_invalid_address"),
-    17: .same(proto: "Error_invalid_utxo"),
-    18: .same(proto: "Error_invalid_utxo_amount"),
-    19: .same(proto: "Error_input_parse"),
-    20: .same(proto: "Error_no_support_n2n"),
-    21: .same(proto: "Error_signatures_count"),
-    22: .same(proto: "Error_invalid_params"),
-    23: .same(proto: "Error_invalid_requested_token_amount"),
-    24: .same(proto: "Error_not_supported"),
-    25: .same(proto: "Error_dust_amount_requested"),
-  ]
-}
-
 extension VSClaimPredicate: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "Predicate_unconditional"),
+    0: .same(proto: "CLAIM_PREDICATE_PREDICATE_UNCONDITIONAL_UNSPECIFIED"),
   ]
 }
 
@@ -2380,7 +2153,7 @@ extension VSClaimant: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
     if !self.account.isEmpty {
       try visitor.visitSingularStringField(value: self.account, fieldNumber: 1)
     }
-    if self.predicate != .predicateUnconditional {
+    if self.predicate != .predicateUnconditionalUnspecified {
       try visitor.visitSingularEnumField(value: self.predicate, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
@@ -2861,7 +2634,7 @@ extension VSSigningOutput: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularStringField(value: &self.signature) }()
-      case 2: try { try decoder.decodeSingularEnumField(value: &self.error) }()
+      case 2: try { try decoder.decodeSingularInt32Field(value: &self.error) }()
       case 3: try { try decoder.decodeSingularStringField(value: &self.errorMessage) }()
       default: break
       }
@@ -2872,8 +2645,8 @@ extension VSSigningOutput: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
     if !self.signature.isEmpty {
       try visitor.visitSingularStringField(value: self.signature, fieldNumber: 1)
     }
-    if self.error != .ok {
-      try visitor.visitSingularEnumField(value: self.error, fieldNumber: 2)
+    if self.error != 0 {
+      try visitor.visitSingularInt32Field(value: self.error, fieldNumber: 2)
     }
     if !self.errorMessage.isEmpty {
       try visitor.visitSingularStringField(value: self.errorMessage, fieldNumber: 3)
