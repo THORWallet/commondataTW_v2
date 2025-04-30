@@ -90,6 +90,7 @@ message TonSpecific {
 message RippleSpecific {
   uint64 sequence = 1;
   uint64 gas = 2;
+  uint64 last_ledger_sequence = 3;
 }
 
 message TronSpecific {

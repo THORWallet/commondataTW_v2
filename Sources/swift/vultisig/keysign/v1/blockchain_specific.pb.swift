@@ -342,6 +342,8 @@ public struct VSRippleSpecific {
 
   public var gas: UInt64 = 0
 
+  public var lastLedgerSequence: UInt64 = 0
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -1593,6 +1595,7 @@ extension VSRippleSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "sequence"),
     2: .same(proto: "gas"),
+    3: .standard(proto: "last_ledger_sequence"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -1603,6 +1606,7 @@ extension VSRippleSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularUInt64Field(value: &self.sequence) }()
       case 2: try { try decoder.decodeSingularUInt64Field(value: &self.gas) }()
+      case 3: try { try decoder.decodeSingularUInt64Field(value: &self.lastLedgerSequence) }()
       default: break
       }
     }
@@ -1615,12 +1619,16 @@ extension VSRippleSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if self.gas != 0 {
       try visitor.visitSingularUInt64Field(value: self.gas, fieldNumber: 2)
     }
+    if self.lastLedgerSequence != 0 {
+      try visitor.visitSingularUInt64Field(value: self.lastLedgerSequence, fieldNumber: 3)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: VSRippleSpecific, rhs: VSRippleSpecific) -> Bool {
     if lhs.sequence != rhs.sequence {return false}
     if lhs.gas != rhs.gas {return false}
+    if lhs.lastLedgerSequence != rhs.lastLedgerSequence {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

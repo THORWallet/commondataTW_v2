@@ -893,8 +893,9 @@ type RippleSpecific struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Sequence uint64 `protobuf:"varint,1,opt,name=sequence,proto3" json:"sequence,omitempty"`
-	Gas      uint64 `protobuf:"varint,2,opt,name=gas,proto3" json:"gas,omitempty"`
+	Sequence           uint64 `protobuf:"varint,1,opt,name=sequence,proto3" json:"sequence,omitempty"`
+	Gas                uint64 `protobuf:"varint,2,opt,name=gas,proto3" json:"gas,omitempty"`
+	LastLedgerSequence uint64 `protobuf:"varint,3,opt,name=last_ledger_sequence,json=lastLedgerSequence,proto3" json:"last_ledger_sequence,omitempty"`
 }
 
 func (x *RippleSpecific) Reset() {
@@ -939,6 +940,13 @@ func (x *RippleSpecific) GetSequence() uint64 {
 func (x *RippleSpecific) GetGas() uint64 {
 	if x != nil {
 		return x.Gas
+	}
+	return 0
+}
+
+func (x *RippleSpecific) GetLastLedgerSequence() uint64 {
+	if x != nil {
+		return x.LastLedgerSequence
 	}
 	return 0
 }
