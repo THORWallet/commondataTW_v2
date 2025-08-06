@@ -20,4 +20,5 @@ message THORChainSwapPayload {
   string streaming_quantity = 10;
   uint64 expiration_time = 11;
   bool is_affiliate = 12;
+  string fee = 13;
 }

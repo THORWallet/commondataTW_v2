@@ -8,4 +8,6 @@ option swift_prefix = "VS";
 message CustomMessagePayload {
   string method = 1;
   string message = 2;
+  string vault_public_key_ecdsa = 3;
+  string vault_local_party_id = 4;
 }

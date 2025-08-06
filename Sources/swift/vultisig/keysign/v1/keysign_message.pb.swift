@@ -186,6 +186,14 @@ public struct VSKeysignPayload {
     set {_uniqueStorage()._blockchainSpecific = .stellarSpecific(newValue)}
   }
 
+  public var cardano: VSCardanoChainSpecific {
+    get {
+      if case .cardano(let v)? = _storage._blockchainSpecific {return v}
+      return VSCardanoChainSpecific()
+    }
+    set {_uniqueStorage()._blockchainSpecific = .cardano(newValue)}
+  }
+
   public var utxoInfo: [VSUtxoInfo] {
     get {return _storage._utxoInfo}
     set {_uniqueStorage()._utxoInfo = newValue}
@@ -229,6 +237,14 @@ public struct VSKeysignPayload {
     set {_uniqueStorage()._swapPayload = .oneinchSwapPayload(newValue)}
   }
 
+  public var kyberswapSwapPayload: VSKyberSwapPayload {
+    get {
+      if case .kyberswapSwapPayload(let v)? = _storage._swapPayload {return v}
+      return VSKyberSwapPayload()
+    }
+    set {_uniqueStorage()._swapPayload = .kyberswapSwapPayload(newValue)}
+  }
+
   public var erc20ApprovePayload: VSErc20ApprovePayload {
     get {return _storage._erc20ApprovePayload ?? VSErc20ApprovePayload()}
     set {_uniqueStorage()._erc20ApprovePayload = newValue}
@@ -248,6 +264,33 @@ public struct VSKeysignPayload {
     set {_uniqueStorage()._vaultLocalPartyID = newValue}
   }
 
+  public var libType: String {
+    get {return _storage._libType}
+    set {_uniqueStorage()._libType = newValue}
+  }
+
+  public var skipBroadcast: Bool {
+    get {return _storage._skipBroadcast ?? false}
+    set {_uniqueStorage()._skipBroadcast = newValue}
+  }
+  /// Returns true if `skipBroadcast` has been explicitly set.
+  public var hasSkipBroadcast: Bool {return _storage._skipBroadcast != nil}
+  /// Clears the value of `skipBroadcast`. Subsequent reads from it will return its default value.
+  public mutating func clearSkipBroadcast() {_uniqueStorage()._skipBroadcast = nil}
+
+  public var contractPayload: OneOf_ContractPayload? {
+    get {return _storage._contractPayload}
+    set {_uniqueStorage()._contractPayload = newValue}
+  }
+
+  public var wasmExecuteContractPayload: VSWasmExecuteContractPayload {
+    get {
+      if case .wasmExecuteContractPayload(let v)? = _storage._contractPayload {return v}
+      return VSWasmExecuteContractPayload()
+    }
+    set {_uniqueStorage()._contractPayload = .wasmExecuteContractPayload(newValue)}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_BlockchainSpecific: Equatable {
@@ -263,6 +306,7 @@ public struct VSKeysignPayload {
     case rippleSpecific(VSRippleSpecific)
     case tronSpecific(VSTronSpecific)
     case stellarSpecific(VSStellarSpecific)
+    case cardano(VSCardanoChainSpecific)
 
   #if !swift(>=4.1)
     public static func ==(lhs: VSKeysignPayload.OneOf_BlockchainSpecific, rhs: VSKeysignPayload.OneOf_BlockchainSpecific) -> Bool {
@@ -318,6 +362,10 @@ public struct VSKeysignPayload {
         guard case .stellarSpecific(let l) = lhs, case .stellarSpecific(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
+      case (.cardano, .cardano): return {
+        guard case .cardano(let l) = lhs, case .cardano(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
       default: return false
       }
     }
@@ -328,6 +376,7 @@ public struct VSKeysignPayload {
     case thorchainSwapPayload(VSTHORChainSwapPayload)
     case mayachainSwapPayload(VSTHORChainSwapPayload)
     case oneinchSwapPayload(VSOneInchSwapPayload)
+    case kyberswapSwapPayload(VSKyberSwapPayload)
 
   #if !swift(>=4.1)
     public static func ==(lhs: VSKeysignPayload.OneOf_SwapPayload, rhs: VSKeysignPayload.OneOf_SwapPayload) -> Bool {
@@ -347,7 +396,29 @@ public struct VSKeysignPayload {
         guard case .oneinchSwapPayload(let l) = lhs, case .oneinchSwapPayload(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
+      case (.kyberswapSwapPayload, .kyberswapSwapPayload): return {
+        guard case .kyberswapSwapPayload(let l) = lhs, case .kyberswapSwapPayload(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
       default: return false
+      }
+    }
+  #endif
+  }
+
+  public enum OneOf_ContractPayload: Equatable {
+    case wasmExecuteContractPayload(VSWasmExecuteContractPayload)
+
+  #if !swift(>=4.1)
+    public static func ==(lhs: VSKeysignPayload.OneOf_ContractPayload, rhs: VSKeysignPayload.OneOf_ContractPayload) -> Bool {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch (lhs, rhs) {
+      case (.wasmExecuteContractPayload, .wasmExecuteContractPayload): return {
+        guard case .wasmExecuteContractPayload(let l) = lhs, case .wasmExecuteContractPayload(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
       }
     }
   #endif
@@ -363,6 +434,7 @@ extension VSKeysignMessage: @unchecked Sendable {}
 extension VSKeysignPayload: @unchecked Sendable {}
 extension VSKeysignPayload.OneOf_BlockchainSpecific: @unchecked Sendable {}
 extension VSKeysignPayload.OneOf_SwapPayload: @unchecked Sendable {}
+extension VSKeysignPayload.OneOf_ContractPayload: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -459,14 +531,19 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     13: .standard(proto: "ripple_specific"),
     14: .standard(proto: "tron_specific"),
     15: .standard(proto: "stellar_specific"),
+    16: .same(proto: "cardano"),
     20: .standard(proto: "utxo_info"),
     21: .same(proto: "memo"),
     22: .standard(proto: "thorchain_swap_payload"),
     23: .standard(proto: "mayachain_swap_payload"),
     24: .standard(proto: "oneinch_swap_payload"),
+    25: .standard(proto: "kyberswap_swap_payload"),
     30: .standard(proto: "erc20_approve_payload"),
     31: .standard(proto: "vault_public_key_ecdsa"),
     32: .standard(proto: "vault_local_party_id"),
+    33: .standard(proto: "lib_type"),
+    34: .standard(proto: "skip_broadcast"),
+    35: .standard(proto: "wasm_execute_contract_payload"),
   ]
 
   fileprivate class _StorageClass {
@@ -480,6 +557,9 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     var _erc20ApprovePayload: VSErc20ApprovePayload? = nil
     var _vaultPublicKeyEcdsa: String = String()
     var _vaultLocalPartyID: String = String()
+    var _libType: String = String()
+    var _skipBroadcast: Bool? = nil
+    var _contractPayload: VSKeysignPayload.OneOf_ContractPayload?
 
     #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
@@ -504,6 +584,9 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       _erc20ApprovePayload = source._erc20ApprovePayload
       _vaultPublicKeyEcdsa = source._vaultPublicKeyEcdsa
       _vaultLocalPartyID = source._vaultLocalPartyID
+      _libType = source._libType
+      _skipBroadcast = source._skipBroadcast
+      _contractPayload = source._contractPayload
     }
   }
 
@@ -681,6 +764,19 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
             _storage._blockchainSpecific = .stellarSpecific(v)
           }
         }()
+        case 16: try {
+          var v: VSCardanoChainSpecific?
+          var hadOneofValue = false
+          if let current = _storage._blockchainSpecific {
+            hadOneofValue = true
+            if case .cardano(let m) = current {v = m}
+          }
+          try decoder.decodeSingularMessageField(value: &v)
+          if let v = v {
+            if hadOneofValue {try decoder.handleConflictingOneOf()}
+            _storage._blockchainSpecific = .cardano(v)
+          }
+        }()
         case 20: try { try decoder.decodeRepeatedMessageField(value: &_storage._utxoInfo) }()
         case 21: try { try decoder.decodeSingularStringField(value: &_storage._memo) }()
         case 22: try {
@@ -722,9 +818,37 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
             _storage._swapPayload = .oneinchSwapPayload(v)
           }
         }()
+        case 25: try {
+          var v: VSKyberSwapPayload?
+          var hadOneofValue = false
+          if let current = _storage._swapPayload {
+            hadOneofValue = true
+            if case .kyberswapSwapPayload(let m) = current {v = m}
+          }
+          try decoder.decodeSingularMessageField(value: &v)
+          if let v = v {
+            if hadOneofValue {try decoder.handleConflictingOneOf()}
+            _storage._swapPayload = .kyberswapSwapPayload(v)
+          }
+        }()
         case 30: try { try decoder.decodeSingularMessageField(value: &_storage._erc20ApprovePayload) }()
         case 31: try { try decoder.decodeSingularStringField(value: &_storage._vaultPublicKeyEcdsa) }()
         case 32: try { try decoder.decodeSingularStringField(value: &_storage._vaultLocalPartyID) }()
+        case 33: try { try decoder.decodeSingularStringField(value: &_storage._libType) }()
+        case 34: try { try decoder.decodeSingularBoolField(value: &_storage._skipBroadcast) }()
+        case 35: try {
+          var v: VSWasmExecuteContractPayload?
+          var hadOneofValue = false
+          if let current = _storage._contractPayload {
+            hadOneofValue = true
+            if case .wasmExecuteContractPayload(let m) = current {v = m}
+          }
+          try decoder.decodeSingularMessageField(value: &v)
+          if let v = v {
+            if hadOneofValue {try decoder.handleConflictingOneOf()}
+            _storage._contractPayload = .wasmExecuteContractPayload(v)
+          }
+        }()
         default: break
         }
       }
@@ -795,6 +919,10 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         guard case .stellarSpecific(let v)? = _storage._blockchainSpecific else { preconditionFailure() }
         try visitor.visitSingularMessageField(value: v, fieldNumber: 15)
       }()
+      case .cardano?: try {
+        guard case .cardano(let v)? = _storage._blockchainSpecific else { preconditionFailure() }
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 16)
+      }()
       case nil: break
       }
       if !_storage._utxoInfo.isEmpty {
@@ -816,6 +944,10 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         guard case .oneinchSwapPayload(let v)? = _storage._swapPayload else { preconditionFailure() }
         try visitor.visitSingularMessageField(value: v, fieldNumber: 24)
       }()
+      case .kyberswapSwapPayload?: try {
+        guard case .kyberswapSwapPayload(let v)? = _storage._swapPayload else { preconditionFailure() }
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 25)
+      }()
       case nil: break
       }
       try { if let v = _storage._erc20ApprovePayload {
@@ -827,6 +959,15 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       if !_storage._vaultLocalPartyID.isEmpty {
         try visitor.visitSingularStringField(value: _storage._vaultLocalPartyID, fieldNumber: 32)
       }
+      if !_storage._libType.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._libType, fieldNumber: 33)
+      }
+      try { if let v = _storage._skipBroadcast {
+        try visitor.visitSingularBoolField(value: v, fieldNumber: 34)
+      } }()
+      try { if case .wasmExecuteContractPayload(let v)? = _storage._contractPayload {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 35)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -846,6 +987,9 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         if _storage._erc20ApprovePayload != rhs_storage._erc20ApprovePayload {return false}
         if _storage._vaultPublicKeyEcdsa != rhs_storage._vaultPublicKeyEcdsa {return false}
         if _storage._vaultLocalPartyID != rhs_storage._vaultLocalPartyID {return false}
+        if _storage._libType != rhs_storage._libType {return false}
+        if _storage._skipBroadcast != rhs_storage._skipBroadcast {return false}
+        if _storage._contractPayload != rhs_storage._contractPayload {return false}
         return true
       }
       if !storagesAreEqual {return false}

@@ -10,6 +10,12 @@ message UTXOSpecific {
   bool send_max_amount = 2;
 }
 
+message CardanoChainSpecific {
+  int64 byte_fee = 1;
+  bool send_max_amount = 2;
+  uint64 ttl = 3; // Add TTL parameter
+}
+
 message EthereumSpecific {
   string max_fee_per_gas_wei = 1;
   string priority_fee = 2;
@@ -22,6 +28,7 @@ message THORChainSpecific {
   uint64 sequence = 2;
   uint64 fee = 3;
   bool is_deposit = 4;
+  TransactionType transaction_type = 5;
 }
 
 message MAYAChainSpecific {
@@ -36,6 +43,7 @@ message CosmosSpecific {
   uint64 gas = 3;
   TransactionType transaction_type = 4;
   optional CosmosIbcDenomTrace ibc_denom_traces = 5;
+  optional CosmosIbcInfo ibc_info = 6;
 }
 
 message CosmosIbcDenomTrace {
@@ -44,10 +52,23 @@ message CosmosIbcDenomTrace {
   string latest_block = 3;
 }
 
+message CosmosIbcInfo {
+  string source_port = 1;
+  string source_channel = 2;
+  uint64 revision_number = 3;
+  uint64 revision_height = 4;
+}
+
 enum TransactionType {
   TRANSACTION_TYPE_UNSPECIFIED = 0;
   TRANSACTION_TYPE_VOTE = 1;
   TRANSACTION_TYPE_PROPOSAL = 2;
+  TRANSACTION_TYPE_IBC_TRANSFER = 3;
+  TRANSACTION_TYPE_THOR_MERGE = 4;
+  TRANSACTION_TYPE_THOR_UNMERGE = 5;
+  TRANSACTION_TYPE_TON_DEPOSIT = 6;
+  TRANSACTION_TYPE_TON_WITHDRAW = 7;
+  TRANSACTION_TYPE_GENERIC_CONTRACT = 8;
 }
 
 message SolanaSpecific {
@@ -85,6 +106,7 @@ message TonSpecific {
   uint64 sequence_number = 1;
   uint64 expire_at = 2;
   bool bounceable = 3;
+  bool send_max_amount = 4;
 }
 
 message RippleSpecific {
