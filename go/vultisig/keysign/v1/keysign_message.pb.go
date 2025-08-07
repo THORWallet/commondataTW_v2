@@ -7,7 +7,6 @@
 package v1
 
 import (
-	v1 "github.com/vultisig/commondata/go/vultisig/keysign/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -394,7 +393,7 @@ func (m *KeysignPayload) GetContractPayload() isKeysignPayload_ContractPayload {
 	return nil
 }
 
-func (x *KeysignPayload) GetWasmExecuteContractPayload() *v1.WasmExecuteContractPayload {
+func (x *KeysignPayload) GetWasmExecuteContractPayload() *WasmExecuteContractPayload {
 	if x, ok := x.GetContractPayload().(*KeysignPayload_WasmExecuteContractPayload); ok {
 		return x.WasmExecuteContractPayload
 	}
@@ -510,7 +509,7 @@ type isKeysignPayload_ContractPayload interface {
 }
 
 type KeysignPayload_WasmExecuteContractPayload struct {
-	WasmExecuteContractPayload *v1.WasmExecuteContractPayload `protobuf:"bytes,35,opt,name=wasm_execute_contract_payload,json=wasmExecuteContractPayload,proto3,oneof"`
+	WasmExecuteContractPayload *WasmExecuteContractPayload `protobuf:"bytes,35,opt,name=wasm_execute_contract_payload,json=wasmExecuteContractPayload,proto3,oneof"`
 }
 
 func (*KeysignPayload_WasmExecuteContractPayload) isKeysignPayload_ContractPayload() {}
@@ -721,28 +720,28 @@ func file_vultisig_keysign_v1_keysign_message_proto_rawDescGZIP() []byte {
 
 var file_vultisig_keysign_v1_keysign_message_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_vultisig_keysign_v1_keysign_message_proto_goTypes = []any{
-	(*KeysignMessage)(nil),                // 0: vultisig.keysign.v1.KeysignMessage
-	(*KeysignPayload)(nil),                // 1: vultisig.keysign.v1.KeysignPayload
-	(*CustomMessagePayload)(nil),          // 2: vultisig.keysign.v1.CustomMessagePayload
-	(*Coin)(nil),                          // 3: vultisig.keysign.v1.Coin
-	(*UTXOSpecific)(nil),                  // 4: vultisig.keysign.v1.UTXOSpecific
-	(*EthereumSpecific)(nil),              // 5: vultisig.keysign.v1.EthereumSpecific
-	(*THORChainSpecific)(nil),             // 6: vultisig.keysign.v1.THORChainSpecific
-	(*MAYAChainSpecific)(nil),             // 7: vultisig.keysign.v1.MAYAChainSpecific
-	(*CosmosSpecific)(nil),                // 8: vultisig.keysign.v1.CosmosSpecific
-	(*SolanaSpecific)(nil),                // 9: vultisig.keysign.v1.SolanaSpecific
-	(*PolkadotSpecific)(nil),              // 10: vultisig.keysign.v1.PolkadotSpecific
-	(*SuiSpecific)(nil),                   // 11: vultisig.keysign.v1.SuiSpecific
-	(*TonSpecific)(nil),                   // 12: vultisig.keysign.v1.TonSpecific
-	(*RippleSpecific)(nil),                // 13: vultisig.keysign.v1.RippleSpecific
-	(*TronSpecific)(nil),                  // 14: vultisig.keysign.v1.TronSpecific
-	(*StellarSpecific)(nil),               // 15: vultisig.keysign.v1.StellarSpecific
-	(*CardanoChainSpecific)(nil),          // 16: vultisig.keysign.v1.CardanoChainSpecific
-	(*UtxoInfo)(nil),                      // 17: vultisig.keysign.v1.UtxoInfo
-	(*THORChainSwapPayload)(nil),          // 18: vultisig.keysign.v1.THORChainSwapPayload
-	(*OneInchSwapPayload)(nil),            // 19: vultisig.keysign.v1.OneInchSwapPayload
-	(*Erc20ApprovePayload)(nil),           // 20: vultisig.keysign.v1.Erc20ApprovePayload
-	(*v1.WasmExecuteContractPayload)(nil), // 21: vultisig.keysign.v1.WasmExecuteContractPayload
+	(*KeysignMessage)(nil),             // 0: vultisig.keysign.v1.KeysignMessage
+	(*KeysignPayload)(nil),             // 1: vultisig.keysign.v1.KeysignPayload
+	(*CustomMessagePayload)(nil),       // 2: vultisig.keysign.v1.CustomMessagePayload
+	(*Coin)(nil),                       // 3: vultisig.keysign.v1.Coin
+	(*UTXOSpecific)(nil),               // 4: vultisig.keysign.v1.UTXOSpecific
+	(*EthereumSpecific)(nil),           // 5: vultisig.keysign.v1.EthereumSpecific
+	(*THORChainSpecific)(nil),          // 6: vultisig.keysign.v1.THORChainSpecific
+	(*MAYAChainSpecific)(nil),          // 7: vultisig.keysign.v1.MAYAChainSpecific
+	(*CosmosSpecific)(nil),             // 8: vultisig.keysign.v1.CosmosSpecific
+	(*SolanaSpecific)(nil),             // 9: vultisig.keysign.v1.SolanaSpecific
+	(*PolkadotSpecific)(nil),           // 10: vultisig.keysign.v1.PolkadotSpecific
+	(*SuiSpecific)(nil),                // 11: vultisig.keysign.v1.SuiSpecific
+	(*TonSpecific)(nil),                // 12: vultisig.keysign.v1.TonSpecific
+	(*RippleSpecific)(nil),             // 13: vultisig.keysign.v1.RippleSpecific
+	(*TronSpecific)(nil),               // 14: vultisig.keysign.v1.TronSpecific
+	(*StellarSpecific)(nil),            // 15: vultisig.keysign.v1.StellarSpecific
+	(*CardanoChainSpecific)(nil),       // 16: vultisig.keysign.v1.CardanoChainSpecific
+	(*UtxoInfo)(nil),                   // 17: vultisig.keysign.v1.UtxoInfo
+	(*THORChainSwapPayload)(nil),       // 18: vultisig.keysign.v1.THORChainSwapPayload
+	(*OneInchSwapPayload)(nil),         // 19: vultisig.keysign.v1.OneInchSwapPayload
+	(*Erc20ApprovePayload)(nil),        // 20: vultisig.keysign.v1.Erc20ApprovePayload
+	(*WasmExecuteContractPayload)(nil), // 21: vultisig.keysign.v1.WasmExecuteContractPayload
 }
 var file_vultisig_keysign_v1_keysign_message_proto_depIdxs = []int32{
 	1,  // 0: vultisig.keysign.v1.KeysignMessage.keysign_payload:type_name -> vultisig.keysign.v1.KeysignPayload
@@ -786,6 +785,7 @@ func file_vultisig_keysign_v1_keysign_message_proto_init() {
 	file_vultisig_keysign_v1_erc20_approve_payload_proto_init()
 	file_vultisig_keysign_v1_thorchain_swap_payload_proto_init()
 	file_vultisig_keysign_v1_utxo_info_proto_init()
+	file_vultisig_keysign_v1_wasm_execute_contract_payload_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_vultisig_keysign_v1_keysign_message_proto_msgTypes[0].Exporter = func(v any, i int) any {
 			switch v := v.(*KeysignMessage); i {
