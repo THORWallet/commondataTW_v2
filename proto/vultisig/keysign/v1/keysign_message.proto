@@ -6,7 +6,6 @@ import "vultisig/keysign/v1/blockchain_specific.proto";
 import "vultisig/keysign/v1/coin.proto";
 import "vultisig/keysign/v1/custom_message_payload.proto";
 import "vultisig/keysign/v1/erc20_approve_payload.proto";
-import "vultisig/keysign/v1/kyberswap_swap_payload.proto";
 import "vultisig/keysign/v1/thorchain_swap_payload.proto";
 import "vultisig/keysign/v1/utxo_info.proto";
 import "vultisig/keysign/v1/wasm_execute_contract_payload.proto";
@@ -50,7 +49,6 @@ message KeysignPayload {
     THORChainSwapPayload thorchain_swap_payload = 22;
     THORChainSwapPayload mayachain_swap_payload = 23;
     OneInchSwapPayload oneinch_swap_payload = 24;
-    KyberSwapPayload kyberswap_swap_payload = 25;
   }
   optional Erc20ApprovePayload erc20_approve_payload = 30;
   string vault_public_key_ecdsa = 31;
