@@ -1074,28 +1074,152 @@ public struct VSNearChainSpecific {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// ID of the sender
   public var signerID: String = String()
 
-  /// Nonce (should be larger than in the last transaction of the account)
   public var nonce: UInt64 = 0
 
-  /// ID of the receiver
   public var receiverID: String = String()
 
-  /// Recent block hash
   public var blockHash: Data = Data()
 
-  /// Payload action(s)
-  public var actions: [VSAction] = []
+  public var actionOneof: VSNearChainSpecific.OneOf_ActionOneof? = nil
 
-  /// The secret private key used for signing (32 bytes).
+  public var createAccount: VSCreateAccount {
+    get {
+      if case .createAccount(let v)? = actionOneof {return v}
+      return VSCreateAccount()
+    }
+    set {actionOneof = .createAccount(newValue)}
+  }
+
+  public var deployContract: VSDeployContract {
+    get {
+      if case .deployContract(let v)? = actionOneof {return v}
+      return VSDeployContract()
+    }
+    set {actionOneof = .deployContract(newValue)}
+  }
+
+  public var functionCall: VSFunctionCall {
+    get {
+      if case .functionCall(let v)? = actionOneof {return v}
+      return VSFunctionCall()
+    }
+    set {actionOneof = .functionCall(newValue)}
+  }
+
+  public var transfer: VSTransfer {
+    get {
+      if case .transfer(let v)? = actionOneof {return v}
+      return VSTransfer()
+    }
+    set {actionOneof = .transfer(newValue)}
+  }
+
+  public var stake: VSStake {
+    get {
+      if case .stake(let v)? = actionOneof {return v}
+      return VSStake()
+    }
+    set {actionOneof = .stake(newValue)}
+  }
+
+  public var addKey: VSAddKey {
+    get {
+      if case .addKey(let v)? = actionOneof {return v}
+      return VSAddKey()
+    }
+    set {actionOneof = .addKey(newValue)}
+  }
+
+  public var deleteKey: VSDeleteKey {
+    get {
+      if case .deleteKey(let v)? = actionOneof {return v}
+      return VSDeleteKey()
+    }
+    set {actionOneof = .deleteKey(newValue)}
+  }
+
+  public var deleteAccount: VSDeleteAccount {
+    get {
+      if case .deleteAccount(let v)? = actionOneof {return v}
+      return VSDeleteAccount()
+    }
+    set {actionOneof = .deleteAccount(newValue)}
+  }
+
+  public var tokenTransfer: VSTokenTransfer {
+    get {
+      if case .tokenTransfer(let v)? = actionOneof {return v}
+      return VSTokenTransfer()
+    }
+    set {actionOneof = .tokenTransfer(newValue)}
+  }
+
   public var privateKey: Data = Data()
 
-  /// The public key used for compiling a transaction with a signature.
   public var publicKey: Data = Data()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public enum OneOf_ActionOneof: Equatable {
+    case createAccount(VSCreateAccount)
+    case deployContract(VSDeployContract)
+    case functionCall(VSFunctionCall)
+    case transfer(VSTransfer)
+    case stake(VSStake)
+    case addKey(VSAddKey)
+    case deleteKey(VSDeleteKey)
+    case deleteAccount(VSDeleteAccount)
+    case tokenTransfer(VSTokenTransfer)
+
+  #if !swift(>=4.1)
+    public static func ==(lhs: VSNearChainSpecific.OneOf_ActionOneof, rhs: VSNearChainSpecific.OneOf_ActionOneof) -> Bool {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch (lhs, rhs) {
+      case (.createAccount, .createAccount): return {
+        guard case .createAccount(let l) = lhs, case .createAccount(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.deployContract, .deployContract): return {
+        guard case .deployContract(let l) = lhs, case .deployContract(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.functionCall, .functionCall): return {
+        guard case .functionCall(let l) = lhs, case .functionCall(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.transfer, .transfer): return {
+        guard case .transfer(let l) = lhs, case .transfer(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.stake, .stake): return {
+        guard case .stake(let l) = lhs, case .stake(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.addKey, .addKey): return {
+        guard case .addKey(let l) = lhs, case .addKey(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.deleteKey, .deleteKey): return {
+        guard case .deleteKey(let l) = lhs, case .deleteKey(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.deleteAccount, .deleteAccount): return {
+        guard case .deleteAccount(let l) = lhs, case .deleteAccount(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.tokenTransfer, .tokenTransfer): return {
+        guard case .tokenTransfer(let l) = lhs, case .tokenTransfer(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      default: return false
+      }
+    }
+  #endif
+  }
 
   public init() {}
 }
@@ -1552,6 +1676,7 @@ extension VSTokenTransfer: @unchecked Sendable {}
 extension VSAction: @unchecked Sendable {}
 extension VSAction.OneOf_Payload: @unchecked Sendable {}
 extension VSNearChainSpecific: @unchecked Sendable {}
+extension VSNearChainSpecific.OneOf_ActionOneof: @unchecked Sendable {}
 extension VSAsset: @unchecked Sendable {}
 extension VSOperationCreateAccount: @unchecked Sendable {}
 extension VSOperationPayment: @unchecked Sendable {}
@@ -3353,9 +3478,17 @@ extension VSNearChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     2: .same(proto: "nonce"),
     3: .standard(proto: "receiver_id"),
     4: .standard(proto: "block_hash"),
-    5: .same(proto: "actions"),
-    6: .standard(proto: "private_key"),
-    7: .standard(proto: "public_key"),
+    5: .standard(proto: "create_account"),
+    6: .standard(proto: "deploy_contract"),
+    7: .standard(proto: "function_call"),
+    8: .same(proto: "transfer"),
+    9: .same(proto: "stake"),
+    10: .standard(proto: "add_key"),
+    11: .standard(proto: "delete_key"),
+    12: .standard(proto: "delete_account"),
+    13: .standard(proto: "token_transfer"),
+    14: .standard(proto: "private_key"),
+    15: .standard(proto: "public_key"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -3368,15 +3501,135 @@ extension VSNearChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       case 2: try { try decoder.decodeSingularUInt64Field(value: &self.nonce) }()
       case 3: try { try decoder.decodeSingularStringField(value: &self.receiverID) }()
       case 4: try { try decoder.decodeSingularBytesField(value: &self.blockHash) }()
-      case 5: try { try decoder.decodeRepeatedMessageField(value: &self.actions) }()
-      case 6: try { try decoder.decodeSingularBytesField(value: &self.privateKey) }()
-      case 7: try { try decoder.decodeSingularBytesField(value: &self.publicKey) }()
+      case 5: try {
+        var v: VSCreateAccount?
+        var hadOneofValue = false
+        if let current = self.actionOneof {
+          hadOneofValue = true
+          if case .createAccount(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.actionOneof = .createAccount(v)
+        }
+      }()
+      case 6: try {
+        var v: VSDeployContract?
+        var hadOneofValue = false
+        if let current = self.actionOneof {
+          hadOneofValue = true
+          if case .deployContract(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.actionOneof = .deployContract(v)
+        }
+      }()
+      case 7: try {
+        var v: VSFunctionCall?
+        var hadOneofValue = false
+        if let current = self.actionOneof {
+          hadOneofValue = true
+          if case .functionCall(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.actionOneof = .functionCall(v)
+        }
+      }()
+      case 8: try {
+        var v: VSTransfer?
+        var hadOneofValue = false
+        if let current = self.actionOneof {
+          hadOneofValue = true
+          if case .transfer(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.actionOneof = .transfer(v)
+        }
+      }()
+      case 9: try {
+        var v: VSStake?
+        var hadOneofValue = false
+        if let current = self.actionOneof {
+          hadOneofValue = true
+          if case .stake(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.actionOneof = .stake(v)
+        }
+      }()
+      case 10: try {
+        var v: VSAddKey?
+        var hadOneofValue = false
+        if let current = self.actionOneof {
+          hadOneofValue = true
+          if case .addKey(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.actionOneof = .addKey(v)
+        }
+      }()
+      case 11: try {
+        var v: VSDeleteKey?
+        var hadOneofValue = false
+        if let current = self.actionOneof {
+          hadOneofValue = true
+          if case .deleteKey(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.actionOneof = .deleteKey(v)
+        }
+      }()
+      case 12: try {
+        var v: VSDeleteAccount?
+        var hadOneofValue = false
+        if let current = self.actionOneof {
+          hadOneofValue = true
+          if case .deleteAccount(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.actionOneof = .deleteAccount(v)
+        }
+      }()
+      case 13: try {
+        var v: VSTokenTransfer?
+        var hadOneofValue = false
+        if let current = self.actionOneof {
+          hadOneofValue = true
+          if case .tokenTransfer(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.actionOneof = .tokenTransfer(v)
+        }
+      }()
+      case 14: try { try decoder.decodeSingularBytesField(value: &self.privateKey) }()
+      case 15: try { try decoder.decodeSingularBytesField(value: &self.publicKey) }()
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
     if !self.signerID.isEmpty {
       try visitor.visitSingularStringField(value: self.signerID, fieldNumber: 1)
     }
@@ -3389,14 +3642,50 @@ extension VSNearChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     if !self.blockHash.isEmpty {
       try visitor.visitSingularBytesField(value: self.blockHash, fieldNumber: 4)
     }
-    if !self.actions.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.actions, fieldNumber: 5)
+    switch self.actionOneof {
+    case .createAccount?: try {
+      guard case .createAccount(let v)? = self.actionOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+    }()
+    case .deployContract?: try {
+      guard case .deployContract(let v)? = self.actionOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+    }()
+    case .functionCall?: try {
+      guard case .functionCall(let v)? = self.actionOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
+    }()
+    case .transfer?: try {
+      guard case .transfer(let v)? = self.actionOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+    }()
+    case .stake?: try {
+      guard case .stake(let v)? = self.actionOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
+    }()
+    case .addKey?: try {
+      guard case .addKey(let v)? = self.actionOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
+    }()
+    case .deleteKey?: try {
+      guard case .deleteKey(let v)? = self.actionOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 11)
+    }()
+    case .deleteAccount?: try {
+      guard case .deleteAccount(let v)? = self.actionOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 12)
+    }()
+    case .tokenTransfer?: try {
+      guard case .tokenTransfer(let v)? = self.actionOneof else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 13)
+    }()
+    case nil: break
     }
     if !self.privateKey.isEmpty {
-      try visitor.visitSingularBytesField(value: self.privateKey, fieldNumber: 6)
+      try visitor.visitSingularBytesField(value: self.privateKey, fieldNumber: 14)
     }
     if !self.publicKey.isEmpty {
-      try visitor.visitSingularBytesField(value: self.publicKey, fieldNumber: 7)
+      try visitor.visitSingularBytesField(value: self.publicKey, fieldNumber: 15)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -3406,7 +3695,7 @@ extension VSNearChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     if lhs.nonce != rhs.nonce {return false}
     if lhs.receiverID != rhs.receiverID {return false}
     if lhs.blockHash != rhs.blockHash {return false}
-    if lhs.actions != rhs.actions {return false}
+    if lhs.actionOneof != rhs.actionOneof {return false}
     if lhs.privateKey != rhs.privateKey {return false}
     if lhs.publicKey != rhs.publicKey {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}

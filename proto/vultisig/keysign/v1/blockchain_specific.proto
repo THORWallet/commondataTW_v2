@@ -283,26 +283,25 @@ message Action {
 }
 
 message NearChainSpecific {
-  // ID of the sender
   string signer_id = 1;
-
-  // Nonce (should be larger than in the last transaction of the account)
   uint64 nonce = 2;
-
-  // ID of the receiver
   string receiver_id = 3;
-
-  // Recent block hash
   bytes block_hash = 4;
 
-  // Payload action(s)
-  repeated Action actions = 5;
+  oneof action_oneof {
+    CreateAccount create_account = 5;
+    DeployContract deploy_contract = 6;
+    FunctionCall function_call = 7;
+    Transfer transfer = 8;
+    Stake stake = 9;
+    AddKey add_key = 10;
+    DeleteKey delete_key = 11;
+    DeleteAccount delete_account = 12;
+    TokenTransfer token_transfer = 13;
+  }
 
-  // The secret private key used for signing (32 bytes).
-  bytes private_key = 6;
-
-  // The public key used for compiling a transaction with a signature.
-  bytes public_key = 7;
+  bytes private_key = 14;
+  bytes public_key = 15;
 }
 
 // Represents an asset
