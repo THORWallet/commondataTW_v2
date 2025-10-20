@@ -194,6 +194,14 @@ public struct VSKeysignPayload {
     set {_uniqueStorage()._blockchainSpecific = .cardano(newValue)}
   }
 
+  public var nearSpecific: VSNearChainSpecific {
+    get {
+      if case .nearSpecific(let v)? = _storage._blockchainSpecific {return v}
+      return VSNearChainSpecific()
+    }
+    set {_uniqueStorage()._blockchainSpecific = .nearSpecific(newValue)}
+  }
+
   public var utxoInfo: [VSUtxoInfo] {
     get {return _storage._utxoInfo}
     set {_uniqueStorage()._utxoInfo = newValue}
@@ -299,6 +307,7 @@ public struct VSKeysignPayload {
     case tronSpecific(VSTronSpecific)
     case stellarSpecific(VSStellarSpecific)
     case cardano(VSCardanoChainSpecific)
+    case nearSpecific(VSNearChainSpecific)
 
   #if !swift(>=4.1)
     public static func ==(lhs: VSKeysignPayload.OneOf_BlockchainSpecific, rhs: VSKeysignPayload.OneOf_BlockchainSpecific) -> Bool {
@@ -356,6 +365,10 @@ public struct VSKeysignPayload {
       }()
       case (.cardano, .cardano): return {
         guard case .cardano(let l) = lhs, case .cardano(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.nearSpecific, .nearSpecific): return {
+        guard case .nearSpecific(let l) = lhs, case .nearSpecific(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
       default: return false
@@ -519,6 +532,7 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     14: .standard(proto: "tron_specific"),
     15: .standard(proto: "stellar_specific"),
     16: .same(proto: "cardano"),
+    17: .standard(proto: "near_specific"),
     20: .standard(proto: "utxo_info"),
     21: .same(proto: "memo"),
     22: .standard(proto: "thorchain_swap_payload"),
@@ -763,6 +777,19 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
             _storage._blockchainSpecific = .cardano(v)
           }
         }()
+        case 17: try {
+          var v: VSNearChainSpecific?
+          var hadOneofValue = false
+          if let current = _storage._blockchainSpecific {
+            hadOneofValue = true
+            if case .nearSpecific(let m) = current {v = m}
+          }
+          try decoder.decodeSingularMessageField(value: &v)
+          if let v = v {
+            if hadOneofValue {try decoder.handleConflictingOneOf()}
+            _storage._blockchainSpecific = .nearSpecific(v)
+          }
+        }()
         case 20: try { try decoder.decodeRepeatedMessageField(value: &_storage._utxoInfo) }()
         case 21: try { try decoder.decodeSingularStringField(value: &_storage._memo) }()
         case 22: try {
@@ -895,6 +922,10 @@ extension VSKeysignPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case .cardano?: try {
         guard case .cardano(let v)? = _storage._blockchainSpecific else { preconditionFailure() }
         try visitor.visitSingularMessageField(value: v, fieldNumber: 16)
+      }()
+      case .nearSpecific?: try {
+        guard case .nearSpecific(let v)? = _storage._blockchainSpecific else { preconditionFailure() }
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 17)
       }()
       case nil: break
       }
