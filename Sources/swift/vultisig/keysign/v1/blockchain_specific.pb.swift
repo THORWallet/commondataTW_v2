@@ -643,157 +643,6 @@ public struct VSStellarSpecific {
   public init() {}
 }
 
-/// Public key with type
-public struct VSPublicKey {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  /// Key type
-  public var keyType: UInt32 = 0
-
-  /// The public key data
-  public var data: Data = Data()
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-}
-
-/// Permissions for a function call
-public struct VSFunctionCallPermission {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  /// uint128 / big endian byte order
-  public var allowance: Data = Data()
-
-  public var receiverID: String = String()
-
-  public var methodNames: [String] = []
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-}
-
-/// Full access
-public struct VSFullAccessPermission {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-}
-
-/// Access key: nonce + permission
-public struct VSAccessKey {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  /// Nonce
-  public var nonce: UInt64 = 0
-
-  /// Permission
-  public var permission: VSAccessKey.OneOf_Permission? = nil
-
-  public var functionCall: VSFunctionCallPermission {
-    get {
-      if case .functionCall(let v)? = permission {return v}
-      return VSFunctionCallPermission()
-    }
-    set {permission = .functionCall(newValue)}
-  }
-
-  public var fullAccess: VSFullAccessPermission {
-    get {
-      if case .fullAccess(let v)? = permission {return v}
-      return VSFullAccessPermission()
-    }
-    set {permission = .fullAccess(newValue)}
-  }
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  /// Permission
-  public enum OneOf_Permission: Equatable {
-    case functionCall(VSFunctionCallPermission)
-    case fullAccess(VSFullAccessPermission)
-
-  #if !swift(>=4.1)
-    public static func ==(lhs: VSAccessKey.OneOf_Permission, rhs: VSAccessKey.OneOf_Permission) -> Bool {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch (lhs, rhs) {
-      case (.functionCall, .functionCall): return {
-        guard case .functionCall(let l) = lhs, case .functionCall(let r) = rhs else { preconditionFailure() }
-        return l == r
-      }()
-      case (.fullAccess, .fullAccess): return {
-        guard case .fullAccess(let l) = lhs, case .fullAccess(let r) = rhs else { preconditionFailure() }
-        return l == r
-      }()
-      default: return false
-      }
-    }
-  #endif
-  }
-
-  public init() {}
-}
-
-/// Create Account
-public struct VSCreateAccount {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-}
-
-/// Deploying a contract
-public struct VSDeployContract {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  public var code: Data = Data()
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-}
-
-/// A method/function call
-public struct VSFunctionCall {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  /// Method/function name
-  public var methodName: String = String()
-
-  /// input arguments
-  public var args: Data = Data()
-
-  /// gas
-  public var gas: UInt64 = 0
-
-  /// uint128 / big endian byte order
-  public var deposit: Data = Data()
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-}
-
 /// Transfer
 public struct VSTransfer {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -802,99 +651,6 @@ public struct VSTransfer {
 
   /// amount; uint128 / big endian byte order
   public var deposit: Data = Data()
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-}
-
-/// Stake
-public struct VSStake {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  /// amount; uint128 / big endian byte order
-  public var stake: Data = Data()
-
-  /// owner public key
-  public var publicKey: VSPublicKey {
-    get {return _publicKey ?? VSPublicKey()}
-    set {_publicKey = newValue}
-  }
-  /// Returns true if `publicKey` has been explicitly set.
-  public var hasPublicKey: Bool {return self._publicKey != nil}
-  /// Clears the value of `publicKey`. Subsequent reads from it will return its default value.
-  public mutating func clearPublicKey() {self._publicKey = nil}
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _publicKey: VSPublicKey? = nil
-}
-
-/// Add a key
-public struct VSAddKey {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  public var publicKey: VSPublicKey {
-    get {return _publicKey ?? VSPublicKey()}
-    set {_publicKey = newValue}
-  }
-  /// Returns true if `publicKey` has been explicitly set.
-  public var hasPublicKey: Bool {return self._publicKey != nil}
-  /// Clears the value of `publicKey`. Subsequent reads from it will return its default value.
-  public mutating func clearPublicKey() {self._publicKey = nil}
-
-  public var accessKey: VSAccessKey {
-    get {return _accessKey ?? VSAccessKey()}
-    set {_accessKey = newValue}
-  }
-  /// Returns true if `accessKey` has been explicitly set.
-  public var hasAccessKey: Bool {return self._accessKey != nil}
-  /// Clears the value of `accessKey`. Subsequent reads from it will return its default value.
-  public mutating func clearAccessKey() {self._accessKey = nil}
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _publicKey: VSPublicKey? = nil
-  fileprivate var _accessKey: VSAccessKey? = nil
-}
-
-/// Delete a key
-public struct VSDeleteKey {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  public var publicKey: VSPublicKey {
-    get {return _publicKey ?? VSPublicKey()}
-    set {_publicKey = newValue}
-  }
-  /// Returns true if `publicKey` has been explicitly set.
-  public var hasPublicKey: Bool {return self._publicKey != nil}
-  /// Clears the value of `publicKey`. Subsequent reads from it will return its default value.
-  public mutating func clearPublicKey() {self._publicKey = nil}
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _publicKey: VSPublicKey? = nil
-}
-
-/// Delete account
-public struct VSDeleteAccount {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  public var beneficiaryID: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -931,30 +687,6 @@ public struct VSAction {
 
   public var payload: VSAction.OneOf_Payload? = nil
 
-  public var createAccount: VSCreateAccount {
-    get {
-      if case .createAccount(let v)? = payload {return v}
-      return VSCreateAccount()
-    }
-    set {payload = .createAccount(newValue)}
-  }
-
-  public var deployContract: VSDeployContract {
-    get {
-      if case .deployContract(let v)? = payload {return v}
-      return VSDeployContract()
-    }
-    set {payload = .deployContract(newValue)}
-  }
-
-  public var functionCall: VSFunctionCall {
-    get {
-      if case .functionCall(let v)? = payload {return v}
-      return VSFunctionCall()
-    }
-    set {payload = .functionCall(newValue)}
-  }
-
   public var transfer: VSTransfer {
     get {
       if case .transfer(let v)? = payload {return v}
@@ -963,39 +695,6 @@ public struct VSAction {
     set {payload = .transfer(newValue)}
   }
 
-  public var stake: VSStake {
-    get {
-      if case .stake(let v)? = payload {return v}
-      return VSStake()
-    }
-    set {payload = .stake(newValue)}
-  }
-
-  public var addKey: VSAddKey {
-    get {
-      if case .addKey(let v)? = payload {return v}
-      return VSAddKey()
-    }
-    set {payload = .addKey(newValue)}
-  }
-
-  public var deleteKey: VSDeleteKey {
-    get {
-      if case .deleteKey(let v)? = payload {return v}
-      return VSDeleteKey()
-    }
-    set {payload = .deleteKey(newValue)}
-  }
-
-  public var deleteAccount: VSDeleteAccount {
-    get {
-      if case .deleteAccount(let v)? = payload {return v}
-      return VSDeleteAccount()
-    }
-    set {payload = .deleteAccount(newValue)}
-  }
-
-  /// Gap in field numbering is intentional as it's not a standard NEAR action.
   public var tokenTransfer: VSTokenTransfer {
     get {
       if case .tokenTransfer(let v)? = payload {return v}
@@ -1007,15 +706,7 @@ public struct VSAction {
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_Payload: Equatable {
-    case createAccount(VSCreateAccount)
-    case deployContract(VSDeployContract)
-    case functionCall(VSFunctionCall)
     case transfer(VSTransfer)
-    case stake(VSStake)
-    case addKey(VSAddKey)
-    case deleteKey(VSDeleteKey)
-    case deleteAccount(VSDeleteAccount)
-    /// Gap in field numbering is intentional as it's not a standard NEAR action.
     case tokenTransfer(VSTokenTransfer)
 
   #if !swift(>=4.1)
@@ -1024,36 +715,8 @@ public struct VSAction {
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch (lhs, rhs) {
-      case (.createAccount, .createAccount): return {
-        guard case .createAccount(let l) = lhs, case .createAccount(let r) = rhs else { preconditionFailure() }
-        return l == r
-      }()
-      case (.deployContract, .deployContract): return {
-        guard case .deployContract(let l) = lhs, case .deployContract(let r) = rhs else { preconditionFailure() }
-        return l == r
-      }()
-      case (.functionCall, .functionCall): return {
-        guard case .functionCall(let l) = lhs, case .functionCall(let r) = rhs else { preconditionFailure() }
-        return l == r
-      }()
       case (.transfer, .transfer): return {
         guard case .transfer(let l) = lhs, case .transfer(let r) = rhs else { preconditionFailure() }
-        return l == r
-      }()
-      case (.stake, .stake): return {
-        guard case .stake(let l) = lhs, case .stake(let r) = rhs else { preconditionFailure() }
-        return l == r
-      }()
-      case (.addKey, .addKey): return {
-        guard case .addKey(let l) = lhs, case .addKey(let r) = rhs else { preconditionFailure() }
-        return l == r
-      }()
-      case (.deleteKey, .deleteKey): return {
-        guard case .deleteKey(let l) = lhs, case .deleteKey(let r) = rhs else { preconditionFailure() }
-        return l == r
-      }()
-      case (.deleteAccount, .deleteAccount): return {
-        guard case .deleteAccount(let l) = lhs, case .deleteAccount(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
       case (.tokenTransfer, .tokenTransfer): return {
@@ -1084,68 +747,12 @@ public struct VSNearChainSpecific {
 
   public var actionOneof: VSNearChainSpecific.OneOf_ActionOneof? = nil
 
-  public var createAccount: VSCreateAccount {
-    get {
-      if case .createAccount(let v)? = actionOneof {return v}
-      return VSCreateAccount()
-    }
-    set {actionOneof = .createAccount(newValue)}
-  }
-
-  public var deployContract: VSDeployContract {
-    get {
-      if case .deployContract(let v)? = actionOneof {return v}
-      return VSDeployContract()
-    }
-    set {actionOneof = .deployContract(newValue)}
-  }
-
-  public var functionCall: VSFunctionCall {
-    get {
-      if case .functionCall(let v)? = actionOneof {return v}
-      return VSFunctionCall()
-    }
-    set {actionOneof = .functionCall(newValue)}
-  }
-
   public var transfer: VSTransfer {
     get {
       if case .transfer(let v)? = actionOneof {return v}
       return VSTransfer()
     }
     set {actionOneof = .transfer(newValue)}
-  }
-
-  public var stake: VSStake {
-    get {
-      if case .stake(let v)? = actionOneof {return v}
-      return VSStake()
-    }
-    set {actionOneof = .stake(newValue)}
-  }
-
-  public var addKey: VSAddKey {
-    get {
-      if case .addKey(let v)? = actionOneof {return v}
-      return VSAddKey()
-    }
-    set {actionOneof = .addKey(newValue)}
-  }
-
-  public var deleteKey: VSDeleteKey {
-    get {
-      if case .deleteKey(let v)? = actionOneof {return v}
-      return VSDeleteKey()
-    }
-    set {actionOneof = .deleteKey(newValue)}
-  }
-
-  public var deleteAccount: VSDeleteAccount {
-    get {
-      if case .deleteAccount(let v)? = actionOneof {return v}
-      return VSDeleteAccount()
-    }
-    set {actionOneof = .deleteAccount(newValue)}
   }
 
   public var tokenTransfer: VSTokenTransfer {
@@ -1156,21 +763,10 @@ public struct VSNearChainSpecific {
     set {actionOneof = .tokenTransfer(newValue)}
   }
 
-  public var privateKey: Data = Data()
-
-  public var publicKey: Data = Data()
-
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_ActionOneof: Equatable {
-    case createAccount(VSCreateAccount)
-    case deployContract(VSDeployContract)
-    case functionCall(VSFunctionCall)
     case transfer(VSTransfer)
-    case stake(VSStake)
-    case addKey(VSAddKey)
-    case deleteKey(VSDeleteKey)
-    case deleteAccount(VSDeleteAccount)
     case tokenTransfer(VSTokenTransfer)
 
   #if !swift(>=4.1)
@@ -1179,36 +775,8 @@ public struct VSNearChainSpecific {
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch (lhs, rhs) {
-      case (.createAccount, .createAccount): return {
-        guard case .createAccount(let l) = lhs, case .createAccount(let r) = rhs else { preconditionFailure() }
-        return l == r
-      }()
-      case (.deployContract, .deployContract): return {
-        guard case .deployContract(let l) = lhs, case .deployContract(let r) = rhs else { preconditionFailure() }
-        return l == r
-      }()
-      case (.functionCall, .functionCall): return {
-        guard case .functionCall(let l) = lhs, case .functionCall(let r) = rhs else { preconditionFailure() }
-        return l == r
-      }()
       case (.transfer, .transfer): return {
         guard case .transfer(let l) = lhs, case .transfer(let r) = rhs else { preconditionFailure() }
-        return l == r
-      }()
-      case (.stake, .stake): return {
-        guard case .stake(let l) = lhs, case .stake(let r) = rhs else { preconditionFailure() }
-        return l == r
-      }()
-      case (.addKey, .addKey): return {
-        guard case .addKey(let l) = lhs, case .addKey(let r) = rhs else { preconditionFailure() }
-        return l == r
-      }()
-      case (.deleteKey, .deleteKey): return {
-        guard case .deleteKey(let l) = lhs, case .deleteKey(let r) = rhs else { preconditionFailure() }
-        return l == r
-      }()
-      case (.deleteAccount, .deleteAccount): return {
-        guard case .deleteAccount(let l) = lhs, case .deleteAccount(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
       case (.tokenTransfer, .tokenTransfer): return {
@@ -1659,19 +1227,7 @@ extension VSTronSpecific: @unchecked Sendable {}
 extension VSStellarSpecific: @unchecked Sendable {}
 extension VSStellarSpecific.OneOf_OperationOneof: @unchecked Sendable {}
 extension VSStellarSpecific.OneOf_MemoTypeOneof: @unchecked Sendable {}
-extension VSPublicKey: @unchecked Sendable {}
-extension VSFunctionCallPermission: @unchecked Sendable {}
-extension VSFullAccessPermission: @unchecked Sendable {}
-extension VSAccessKey: @unchecked Sendable {}
-extension VSAccessKey.OneOf_Permission: @unchecked Sendable {}
-extension VSCreateAccount: @unchecked Sendable {}
-extension VSDeployContract: @unchecked Sendable {}
-extension VSFunctionCall: @unchecked Sendable {}
 extension VSTransfer: @unchecked Sendable {}
-extension VSStake: @unchecked Sendable {}
-extension VSAddKey: @unchecked Sendable {}
-extension VSDeleteKey: @unchecked Sendable {}
-extension VSDeleteAccount: @unchecked Sendable {}
 extension VSTokenTransfer: @unchecked Sendable {}
 extension VSAction: @unchecked Sendable {}
 extension VSAction.OneOf_Payload: @unchecked Sendable {}
@@ -2763,284 +2319,6 @@ extension VSStellarSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
   }
 }
 
-extension VSPublicKey: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".PublicKey"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "key_type"),
-    2: .same(proto: "data"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularUInt32Field(value: &self.keyType) }()
-      case 2: try { try decoder.decodeSingularBytesField(value: &self.data) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.keyType != 0 {
-      try visitor.visitSingularUInt32Field(value: self.keyType, fieldNumber: 1)
-    }
-    if !self.data.isEmpty {
-      try visitor.visitSingularBytesField(value: self.data, fieldNumber: 2)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: VSPublicKey, rhs: VSPublicKey) -> Bool {
-    if lhs.keyType != rhs.keyType {return false}
-    if lhs.data != rhs.data {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension VSFunctionCallPermission: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".FunctionCallPermission"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "allowance"),
-    2: .standard(proto: "receiver_id"),
-    3: .standard(proto: "method_names"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularBytesField(value: &self.allowance) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.receiverID) }()
-      case 3: try { try decoder.decodeRepeatedStringField(value: &self.methodNames) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.allowance.isEmpty {
-      try visitor.visitSingularBytesField(value: self.allowance, fieldNumber: 1)
-    }
-    if !self.receiverID.isEmpty {
-      try visitor.visitSingularStringField(value: self.receiverID, fieldNumber: 2)
-    }
-    if !self.methodNames.isEmpty {
-      try visitor.visitRepeatedStringField(value: self.methodNames, fieldNumber: 3)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: VSFunctionCallPermission, rhs: VSFunctionCallPermission) -> Bool {
-    if lhs.allowance != rhs.allowance {return false}
-    if lhs.receiverID != rhs.receiverID {return false}
-    if lhs.methodNames != rhs.methodNames {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension VSFullAccessPermission: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".FullAccessPermission"
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let _ = try decoder.nextFieldNumber() {
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: VSFullAccessPermission, rhs: VSFullAccessPermission) -> Bool {
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension VSAccessKey: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".AccessKey"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "nonce"),
-    2: .standard(proto: "function_call"),
-    3: .standard(proto: "full_access"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularUInt64Field(value: &self.nonce) }()
-      case 2: try {
-        var v: VSFunctionCallPermission?
-        var hadOneofValue = false
-        if let current = self.permission {
-          hadOneofValue = true
-          if case .functionCall(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.permission = .functionCall(v)
-        }
-      }()
-      case 3: try {
-        var v: VSFullAccessPermission?
-        var hadOneofValue = false
-        if let current = self.permission {
-          hadOneofValue = true
-          if case .fullAccess(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.permission = .fullAccess(v)
-        }
-      }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    if self.nonce != 0 {
-      try visitor.visitSingularUInt64Field(value: self.nonce, fieldNumber: 1)
-    }
-    switch self.permission {
-    case .functionCall?: try {
-      guard case .functionCall(let v)? = self.permission else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-    }()
-    case .fullAccess?: try {
-      guard case .fullAccess(let v)? = self.permission else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
-    }()
-    case nil: break
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: VSAccessKey, rhs: VSAccessKey) -> Bool {
-    if lhs.nonce != rhs.nonce {return false}
-    if lhs.permission != rhs.permission {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension VSCreateAccount: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".CreateAccount"
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let _ = try decoder.nextFieldNumber() {
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: VSCreateAccount, rhs: VSCreateAccount) -> Bool {
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension VSDeployContract: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".DeployContract"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "code"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularBytesField(value: &self.code) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.code.isEmpty {
-      try visitor.visitSingularBytesField(value: self.code, fieldNumber: 1)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: VSDeployContract, rhs: VSDeployContract) -> Bool {
-    if lhs.code != rhs.code {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension VSFunctionCall: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".FunctionCall"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "method_name"),
-    2: .same(proto: "args"),
-    3: .same(proto: "gas"),
-    4: .same(proto: "deposit"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.methodName) }()
-      case 2: try { try decoder.decodeSingularBytesField(value: &self.args) }()
-      case 3: try { try decoder.decodeSingularUInt64Field(value: &self.gas) }()
-      case 4: try { try decoder.decodeSingularBytesField(value: &self.deposit) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.methodName.isEmpty {
-      try visitor.visitSingularStringField(value: self.methodName, fieldNumber: 1)
-    }
-    if !self.args.isEmpty {
-      try visitor.visitSingularBytesField(value: self.args, fieldNumber: 2)
-    }
-    if self.gas != 0 {
-      try visitor.visitSingularUInt64Field(value: self.gas, fieldNumber: 3)
-    }
-    if !self.deposit.isEmpty {
-      try visitor.visitSingularBytesField(value: self.deposit, fieldNumber: 4)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: VSFunctionCall, rhs: VSFunctionCall) -> Bool {
-    if lhs.methodName != rhs.methodName {return false}
-    if lhs.args != rhs.args {return false}
-    if lhs.gas != rhs.gas {return false}
-    if lhs.deposit != rhs.deposit {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
 extension VSTransfer: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Transfer"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -3068,158 +2346,6 @@ extension VSTransfer: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
 
   public static func ==(lhs: VSTransfer, rhs: VSTransfer) -> Bool {
     if lhs.deposit != rhs.deposit {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension VSStake: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".Stake"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "stake"),
-    2: .standard(proto: "public_key"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularBytesField(value: &self.stake) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._publicKey) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    if !self.stake.isEmpty {
-      try visitor.visitSingularBytesField(value: self.stake, fieldNumber: 1)
-    }
-    try { if let v = self._publicKey {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-    } }()
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: VSStake, rhs: VSStake) -> Bool {
-    if lhs.stake != rhs.stake {return false}
-    if lhs._publicKey != rhs._publicKey {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension VSAddKey: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".AddKey"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "public_key"),
-    2: .standard(proto: "access_key"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._publicKey) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._accessKey) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._publicKey {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    try { if let v = self._accessKey {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-    } }()
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: VSAddKey, rhs: VSAddKey) -> Bool {
-    if lhs._publicKey != rhs._publicKey {return false}
-    if lhs._accessKey != rhs._accessKey {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension VSDeleteKey: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".DeleteKey"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "public_key"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._publicKey) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._publicKey {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: VSDeleteKey, rhs: VSDeleteKey) -> Bool {
-    if lhs._publicKey != rhs._publicKey {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension VSDeleteAccount: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".DeleteAccount"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "beneficiary_id"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.beneficiaryID) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.beneficiaryID.isEmpty {
-      try visitor.visitSingularStringField(value: self.beneficiaryID, fieldNumber: 1)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: VSDeleteAccount, rhs: VSDeleteAccount) -> Bool {
-    if lhs.beneficiaryID != rhs.beneficiaryID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -3278,15 +2404,8 @@ extension VSTokenTransfer: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
 extension VSAction: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Action"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "create_account"),
-    2: .standard(proto: "deploy_contract"),
-    3: .standard(proto: "function_call"),
-    4: .same(proto: "transfer"),
-    5: .same(proto: "stake"),
-    6: .standard(proto: "add_key"),
-    7: .standard(proto: "delete_key"),
-    8: .standard(proto: "delete_account"),
-    13: .standard(proto: "token_transfer"),
+    1: .same(proto: "transfer"),
+    2: .standard(proto: "token_transfer"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -3296,45 +2415,6 @@ extension VSAction: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try {
-        var v: VSCreateAccount?
-        var hadOneofValue = false
-        if let current = self.payload {
-          hadOneofValue = true
-          if case .createAccount(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.payload = .createAccount(v)
-        }
-      }()
-      case 2: try {
-        var v: VSDeployContract?
-        var hadOneofValue = false
-        if let current = self.payload {
-          hadOneofValue = true
-          if case .deployContract(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.payload = .deployContract(v)
-        }
-      }()
-      case 3: try {
-        var v: VSFunctionCall?
-        var hadOneofValue = false
-        if let current = self.payload {
-          hadOneofValue = true
-          if case .functionCall(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.payload = .functionCall(v)
-        }
-      }()
-      case 4: try {
         var v: VSTransfer?
         var hadOneofValue = false
         if let current = self.payload {
@@ -3347,59 +2427,7 @@ extension VSAction: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
           self.payload = .transfer(v)
         }
       }()
-      case 5: try {
-        var v: VSStake?
-        var hadOneofValue = false
-        if let current = self.payload {
-          hadOneofValue = true
-          if case .stake(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.payload = .stake(v)
-        }
-      }()
-      case 6: try {
-        var v: VSAddKey?
-        var hadOneofValue = false
-        if let current = self.payload {
-          hadOneofValue = true
-          if case .addKey(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.payload = .addKey(v)
-        }
-      }()
-      case 7: try {
-        var v: VSDeleteKey?
-        var hadOneofValue = false
-        if let current = self.payload {
-          hadOneofValue = true
-          if case .deleteKey(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.payload = .deleteKey(v)
-        }
-      }()
-      case 8: try {
-        var v: VSDeleteAccount?
-        var hadOneofValue = false
-        if let current = self.payload {
-          hadOneofValue = true
-          if case .deleteAccount(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.payload = .deleteAccount(v)
-        }
-      }()
-      case 13: try {
+      case 2: try {
         var v: VSTokenTransfer?
         var hadOneofValue = false
         if let current = self.payload {
@@ -3423,41 +2451,13 @@ extension VSAction: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
     // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
     // https://github.com/apple/swift-protobuf/issues/1182
     switch self.payload {
-    case .createAccount?: try {
-      guard case .createAccount(let v)? = self.payload else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    }()
-    case .deployContract?: try {
-      guard case .deployContract(let v)? = self.payload else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-    }()
-    case .functionCall?: try {
-      guard case .functionCall(let v)? = self.payload else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
-    }()
     case .transfer?: try {
       guard case .transfer(let v)? = self.payload else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
-    }()
-    case .stake?: try {
-      guard case .stake(let v)? = self.payload else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
-    }()
-    case .addKey?: try {
-      guard case .addKey(let v)? = self.payload else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
-    }()
-    case .deleteKey?: try {
-      guard case .deleteKey(let v)? = self.payload else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
-    }()
-    case .deleteAccount?: try {
-      guard case .deleteAccount(let v)? = self.payload else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
     }()
     case .tokenTransfer?: try {
       guard case .tokenTransfer(let v)? = self.payload else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 13)
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
     }()
     case nil: break
     }
@@ -3478,17 +2478,8 @@ extension VSNearChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     2: .same(proto: "nonce"),
     3: .standard(proto: "receiver_id"),
     4: .standard(proto: "block_hash"),
-    5: .standard(proto: "create_account"),
-    6: .standard(proto: "deploy_contract"),
-    7: .standard(proto: "function_call"),
-    8: .same(proto: "transfer"),
-    9: .same(proto: "stake"),
-    10: .standard(proto: "add_key"),
-    11: .standard(proto: "delete_key"),
-    12: .standard(proto: "delete_account"),
-    13: .standard(proto: "token_transfer"),
-    14: .standard(proto: "private_key"),
-    15: .standard(proto: "public_key"),
+    5: .same(proto: "transfer"),
+    6: .standard(proto: "token_transfer"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -3502,45 +2493,6 @@ extension VSNearChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       case 3: try { try decoder.decodeSingularStringField(value: &self.receiverID) }()
       case 4: try { try decoder.decodeSingularBytesField(value: &self.blockHash) }()
       case 5: try {
-        var v: VSCreateAccount?
-        var hadOneofValue = false
-        if let current = self.actionOneof {
-          hadOneofValue = true
-          if case .createAccount(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.actionOneof = .createAccount(v)
-        }
-      }()
-      case 6: try {
-        var v: VSDeployContract?
-        var hadOneofValue = false
-        if let current = self.actionOneof {
-          hadOneofValue = true
-          if case .deployContract(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.actionOneof = .deployContract(v)
-        }
-      }()
-      case 7: try {
-        var v: VSFunctionCall?
-        var hadOneofValue = false
-        if let current = self.actionOneof {
-          hadOneofValue = true
-          if case .functionCall(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.actionOneof = .functionCall(v)
-        }
-      }()
-      case 8: try {
         var v: VSTransfer?
         var hadOneofValue = false
         if let current = self.actionOneof {
@@ -3553,59 +2505,7 @@ extension VSNearChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
           self.actionOneof = .transfer(v)
         }
       }()
-      case 9: try {
-        var v: VSStake?
-        var hadOneofValue = false
-        if let current = self.actionOneof {
-          hadOneofValue = true
-          if case .stake(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.actionOneof = .stake(v)
-        }
-      }()
-      case 10: try {
-        var v: VSAddKey?
-        var hadOneofValue = false
-        if let current = self.actionOneof {
-          hadOneofValue = true
-          if case .addKey(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.actionOneof = .addKey(v)
-        }
-      }()
-      case 11: try {
-        var v: VSDeleteKey?
-        var hadOneofValue = false
-        if let current = self.actionOneof {
-          hadOneofValue = true
-          if case .deleteKey(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.actionOneof = .deleteKey(v)
-        }
-      }()
-      case 12: try {
-        var v: VSDeleteAccount?
-        var hadOneofValue = false
-        if let current = self.actionOneof {
-          hadOneofValue = true
-          if case .deleteAccount(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.actionOneof = .deleteAccount(v)
-        }
-      }()
-      case 13: try {
+      case 6: try {
         var v: VSTokenTransfer?
         var hadOneofValue = false
         if let current = self.actionOneof {
@@ -3618,8 +2518,6 @@ extension VSNearChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
           self.actionOneof = .tokenTransfer(v)
         }
       }()
-      case 14: try { try decoder.decodeSingularBytesField(value: &self.privateKey) }()
-      case 15: try { try decoder.decodeSingularBytesField(value: &self.publicKey) }()
       default: break
       }
     }
@@ -3643,49 +2541,15 @@ extension VSNearChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       try visitor.visitSingularBytesField(value: self.blockHash, fieldNumber: 4)
     }
     switch self.actionOneof {
-    case .createAccount?: try {
-      guard case .createAccount(let v)? = self.actionOneof else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
-    }()
-    case .deployContract?: try {
-      guard case .deployContract(let v)? = self.actionOneof else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
-    }()
-    case .functionCall?: try {
-      guard case .functionCall(let v)? = self.actionOneof else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
-    }()
     case .transfer?: try {
       guard case .transfer(let v)? = self.actionOneof else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
-    }()
-    case .stake?: try {
-      guard case .stake(let v)? = self.actionOneof else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
-    }()
-    case .addKey?: try {
-      guard case .addKey(let v)? = self.actionOneof else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
-    }()
-    case .deleteKey?: try {
-      guard case .deleteKey(let v)? = self.actionOneof else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 11)
-    }()
-    case .deleteAccount?: try {
-      guard case .deleteAccount(let v)? = self.actionOneof else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 12)
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
     }()
     case .tokenTransfer?: try {
       guard case .tokenTransfer(let v)? = self.actionOneof else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 13)
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
     }()
     case nil: break
-    }
-    if !self.privateKey.isEmpty {
-      try visitor.visitSingularBytesField(value: self.privateKey, fieldNumber: 14)
-    }
-    if !self.publicKey.isEmpty {
-      try visitor.visitSingularBytesField(value: self.publicKey, fieldNumber: 15)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -3696,8 +2560,6 @@ extension VSNearChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     if lhs.receiverID != rhs.receiverID {return false}
     if lhs.blockHash != rhs.blockHash {return false}
     if lhs.actionOneof != rhs.actionOneof {return false}
-    if lhs.privateKey != rhs.privateKey {return false}
-    if lhs.publicKey != rhs.publicKey {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
