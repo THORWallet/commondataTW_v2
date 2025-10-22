@@ -739,11 +739,7 @@ public struct VSNearChainSpecific {
 
   public var signerID: String = String()
 
-  public var nonce: UInt64 = 0
-
   public var receiverID: String = String()
-
-  public var blockHash: Data = Data()
 
   public var actionOneof: VSNearChainSpecific.OneOf_ActionOneof? = nil
 
@@ -2475,11 +2471,9 @@ extension VSNearChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
   public static let protoMessageName: String = _protobuf_package + ".NearChainSpecific"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "signer_id"),
-    2: .same(proto: "nonce"),
-    3: .standard(proto: "receiver_id"),
-    4: .standard(proto: "block_hash"),
-    5: .same(proto: "transfer"),
-    6: .standard(proto: "token_transfer"),
+    2: .standard(proto: "receiver_id"),
+    3: .same(proto: "transfer"),
+    4: .standard(proto: "token_transfer"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -2489,10 +2483,8 @@ extension VSNearChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularStringField(value: &self.signerID) }()
-      case 2: try { try decoder.decodeSingularUInt64Field(value: &self.nonce) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.receiverID) }()
-      case 4: try { try decoder.decodeSingularBytesField(value: &self.blockHash) }()
-      case 5: try {
+      case 2: try { try decoder.decodeSingularStringField(value: &self.receiverID) }()
+      case 3: try {
         var v: VSTransfer?
         var hadOneofValue = false
         if let current = self.actionOneof {
@@ -2505,7 +2497,7 @@ extension VSNearChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
           self.actionOneof = .transfer(v)
         }
       }()
-      case 6: try {
+      case 4: try {
         var v: VSTokenTransfer?
         var hadOneofValue = false
         if let current = self.actionOneof {
@@ -2531,23 +2523,17 @@ extension VSNearChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     if !self.signerID.isEmpty {
       try visitor.visitSingularStringField(value: self.signerID, fieldNumber: 1)
     }
-    if self.nonce != 0 {
-      try visitor.visitSingularUInt64Field(value: self.nonce, fieldNumber: 2)
-    }
     if !self.receiverID.isEmpty {
-      try visitor.visitSingularStringField(value: self.receiverID, fieldNumber: 3)
-    }
-    if !self.blockHash.isEmpty {
-      try visitor.visitSingularBytesField(value: self.blockHash, fieldNumber: 4)
+      try visitor.visitSingularStringField(value: self.receiverID, fieldNumber: 2)
     }
     switch self.actionOneof {
     case .transfer?: try {
       guard case .transfer(let v)? = self.actionOneof else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
     }()
     case .tokenTransfer?: try {
       guard case .tokenTransfer(let v)? = self.actionOneof else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
     }()
     case nil: break
     }
@@ -2556,9 +2542,7 @@ extension VSNearChainSpecific: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
 
   public static func ==(lhs: VSNearChainSpecific, rhs: VSNearChainSpecific) -> Bool {
     if lhs.signerID != rhs.signerID {return false}
-    if lhs.nonce != rhs.nonce {return false}
     if lhs.receiverID != rhs.receiverID {return false}
-    if lhs.blockHash != rhs.blockHash {return false}
     if lhs.actionOneof != rhs.actionOneof {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
