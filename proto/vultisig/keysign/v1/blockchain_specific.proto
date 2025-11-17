@@ -164,44 +164,6 @@ message StellarSpecific {
   int64 time_bounds = 16;
 }
 
-// Transfer
-message Transfer {
-  // amount; uint128 / big endian byte order
-  bytes deposit = 1;
-}
-
-// Fungible token transfer
-message TokenTransfer {
-  // Token amount. Base-10 decimal string.
-  string token_amount = 1;
-
-  // ID of the receiver.
-  string receiver_id = 2;
-
-  // Gas.
-  uint64 gas = 3;
-
-  // NEAR deposit amount; uint128 / big endian byte order.
-  bytes deposit = 4;
-}
-
-message Action {
-  oneof payload {
-    Transfer transfer = 1;
-    TokenTransfer token_transfer = 2;
-  }
-}
-
-message NearChainSpecific {
-  string signer_id = 1;
-  string receiver_id = 2;
-
-  oneof action_oneof {
-    Transfer transfer = 3;
-    TokenTransfer token_transfer = 4;
-  }
-}
-
 // Represents an asset
 // Note: alphanum12 currently not supported
 message Asset {
