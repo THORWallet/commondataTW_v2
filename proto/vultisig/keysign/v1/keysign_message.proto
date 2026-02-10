@@ -8,8 +8,9 @@ import "vultisig/keysign/v1/custom_message_payload.proto";
 import "vultisig/keysign/v1/erc20_approve_payload.proto";
 import "vultisig/keysign/v1/thorchain_swap_payload.proto";
 import "vultisig/keysign/v1/utxo_info.proto";
+import "vultisig/keysign/v1/wasm_execute_contract_payload.proto";
 
-option go_package = "github.com/vultisig/commondata/go/vultisig/keysign/v1;v1";
+option go_package = "github.com/THORWallet/commondataTW_v2/go/vultisig/keysign/v1;v1";
 option java_package = "vultisig.keysign.v1";
 option swift_prefix = "VS";
 
@@ -39,6 +40,8 @@ message KeysignPayload {
     TonSpecific ton_specific = 12;
     RippleSpecific ripple_specific = 13;
     TronSpecific tron_specific = 14;
+    StellarSpecific stellar_specific = 15;
+    CardanoChainSpecific cardano = 16;
   }
   repeated UtxoInfo utxo_info = 20;
   optional string memo = 21;
@@ -50,4 +53,9 @@ message KeysignPayload {
   optional Erc20ApprovePayload erc20_approve_payload = 30;
   string vault_public_key_ecdsa = 31;
   string vault_local_party_id = 32;
+  string lib_type = 33;
+  optional bool skip_broadcast = 34;
+  oneof contract_payload {
+    WasmExecuteContractPayload wasm_execute_contract_payload = 35;
+  }
 }

@@ -29,6 +29,10 @@ public struct VSCustomMessagePayload {
 
   public var message: String = String()
 
+  public var vaultPublicKeyEcdsa: String = String()
+
+  public var vaultLocalPartyID: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -47,6 +51,8 @@ extension VSCustomMessagePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "method"),
     2: .same(proto: "message"),
+    3: .standard(proto: "vault_public_key_ecdsa"),
+    4: .standard(proto: "vault_local_party_id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -57,6 +63,8 @@ extension VSCustomMessagePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularStringField(value: &self.method) }()
       case 2: try { try decoder.decodeSingularStringField(value: &self.message) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.vaultPublicKeyEcdsa) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.vaultLocalPartyID) }()
       default: break
       }
     }
@@ -69,12 +77,20 @@ extension VSCustomMessagePayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     if !self.message.isEmpty {
       try visitor.visitSingularStringField(value: self.message, fieldNumber: 2)
     }
+    if !self.vaultPublicKeyEcdsa.isEmpty {
+      try visitor.visitSingularStringField(value: self.vaultPublicKeyEcdsa, fieldNumber: 3)
+    }
+    if !self.vaultLocalPartyID.isEmpty {
+      try visitor.visitSingularStringField(value: self.vaultLocalPartyID, fieldNumber: 4)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: VSCustomMessagePayload, rhs: VSCustomMessagePayload) -> Bool {
     if lhs.method != rhs.method {return false}
     if lhs.message != rhs.message {return false}
+    if lhs.vaultPublicKeyEcdsa != rhs.vaultPublicKeyEcdsa {return false}
+    if lhs.vaultLocalPartyID != rhs.vaultLocalPartyID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

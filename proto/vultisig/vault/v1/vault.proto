@@ -4,7 +4,7 @@ package vultisig.vault.v1;
 import "google/protobuf/timestamp.proto";
 import "vultisig/keygen/v1/lib_type_message.proto";
 
-option go_package = "github.com/vultisig/commondata/go/vultisig/vault/v1;v1";
+option go_package = "github.com/THORWallet/commondataTW_v2/go/vultisig/vault/v1;v1";
 option java_package = "vultisig.vault.v1";
 option swift_prefix = "VS";
 

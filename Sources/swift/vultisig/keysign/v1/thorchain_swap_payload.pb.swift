@@ -97,6 +97,11 @@ public struct VSTHORChainSwapPayload {
     set {_uniqueStorage()._isAffiliate = newValue}
   }
 
+  public var fee: String {
+    get {return _storage._fee}
+    set {_uniqueStorage()._fee = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -127,6 +132,7 @@ extension VSTHORChainSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     10: .standard(proto: "streaming_quantity"),
     11: .standard(proto: "expiration_time"),
     12: .standard(proto: "is_affiliate"),
+    13: .same(proto: "fee"),
   ]
 
   fileprivate class _StorageClass {
@@ -142,6 +148,7 @@ extension VSTHORChainSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     var _streamingQuantity: String = String()
     var _expirationTime: UInt64 = 0
     var _isAffiliate: Bool = false
+    var _fee: String = String()
 
     #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
@@ -168,6 +175,7 @@ extension VSTHORChainSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       _streamingQuantity = source._streamingQuantity
       _expirationTime = source._expirationTime
       _isAffiliate = source._isAffiliate
+      _fee = source._fee
     }
   }
 
@@ -198,6 +206,7 @@ extension VSTHORChainSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
         case 10: try { try decoder.decodeSingularStringField(value: &_storage._streamingQuantity) }()
         case 11: try { try decoder.decodeSingularUInt64Field(value: &_storage._expirationTime) }()
         case 12: try { try decoder.decodeSingularBoolField(value: &_storage._isAffiliate) }()
+        case 13: try { try decoder.decodeSingularStringField(value: &_storage._fee) }()
         default: break
         }
       }
@@ -246,6 +255,9 @@ extension VSTHORChainSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       if _storage._isAffiliate != false {
         try visitor.visitSingularBoolField(value: _storage._isAffiliate, fieldNumber: 12)
       }
+      if !_storage._fee.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._fee, fieldNumber: 13)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -267,6 +279,7 @@ extension VSTHORChainSwapPayload: SwiftProtobuf.Message, SwiftProtobuf._MessageI
         if _storage._streamingQuantity != rhs_storage._streamingQuantity {return false}
         if _storage._expirationTime != rhs_storage._expirationTime {return false}
         if _storage._isAffiliate != rhs_storage._isAffiliate {return false}
+        if _storage._fee != rhs_storage._fee {return false}
         return true
       }
       if !storagesAreEqual {return false}
